@@ -1,12 +1,21 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { loginImg, logo } from "../../assets";
+import { adminLogin } from "../../services/auth";
+import LoginError from "./LoginError";
 
 const Login = () => {
-  const { register, handleSubmit } = useForm();
+  const [isError, setIsError] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+    adminLogin(data, setIsError);
   };
 
   return (
@@ -19,6 +28,7 @@ const Login = () => {
           <div>
             <img src={logo} alt="logo" className="mb-4" />
             <h1 className="mb-4">Welcome, Admin BCR</h1>
+            {isError && <LoginError />}
             <form
               className="d-flex flex-column gap-3"
               onSubmit={handleSubmit(onSubmit)}
@@ -40,8 +50,13 @@ const Login = () => {
                   id="password"
                   placeholder="6+ karakter"
                   className="p-1"
-                  {...register("password", { required: true })}
+                  {...register("password", { required: true, minLength: 6 })}
                 />
+                {errors.password && (
+                  <span className="text-danger">
+                    Password minimal 6 karakter
+                  </span>
+                )}
               </div>
               <button
                 type="submit"
