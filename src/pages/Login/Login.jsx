@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 import { loginImg, logo } from "../../assets";
 import { adminLogin } from "../../services/auth";
@@ -8,11 +10,19 @@ import LoginError from "./LoginError";
 const Login = () => {
   const [isError, setIsError] = useState(false);
 
+  const schema = yup.object().shape({
+    email: yup
+      .string()
+      .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "E-mail tidak valid")
+      .required("E-mail tidak boleh kosong"),
+    password: yup.string().min(6, "Isi minimal 6 karakter").required(),
+  });
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({ resolver: yupResolver(schema) });
 
   const onSubmit = (data) => {
     adminLogin(data, setIsError);
@@ -36,12 +46,13 @@ const Login = () => {
               <div className="d-flex flex-column gap-2">
                 <label htmlFor="email">Email</label>
                 <input
-                  type="email"
+                  type="text"
                   id="email"
                   placeholder="Contoh: johndee@gmail.com"
                   className="p-1"
                   {...register("email", { required: true })}
                 />
+                <span className="text-danger">{errors.email?.message}</span>
               </div>
               <div className="d-flex flex-column gap-2 mb-3">
                 <label htmlFor="password">Password</label>
@@ -52,11 +63,7 @@ const Login = () => {
                   className="p-1"
                   {...register("password", { required: true, minLength: 6 })}
                 />
-                {errors.password && (
-                  <span className="text-danger">
-                    Password minimal 6 karakter
-                  </span>
-                )}
+                <span className="text-danger">{errors.password?.message}</span>
               </div>
               <button
                 type="submit"
