@@ -1,0 +1,9 @@
+:root {
+  --primaryBlue: #0d28a6;
+  --primaryRed: rgba(208, 12, 26, 0.1);
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
