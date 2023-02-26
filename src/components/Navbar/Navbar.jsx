@@ -2,7 +2,10 @@ import { logo, menu } from "../../assets";
 
 const Navbar = ({ sidebarWidth }) => {
   return (
-    <nav className="navbar fixed-top bg-light" style={{ left: sidebarWidth }}>
+    <nav
+      className="navbar fixed-top shadow-sm bg-white"
+      style={{ left: sidebarWidth }}
+    >
       <div className="container-fluid">
         <div className="d-flex gap-5">
           <button className="border-0 bg-transparent">
@@ -20,7 +23,14 @@ const Navbar = ({ sidebarWidth }) => {
               placeholder="Search"
               aria-label="Search"
             />
-            <button className="btn btn-outline-success" type="submit">
+            <button
+              className="btn fw-bold"
+              type="submit"
+              style={{
+                color: "var(--primaryBlue)",
+                borderColor: "var(--primaryBlue)",
+              }}
+            >
               Search
             </button>
           </form>
