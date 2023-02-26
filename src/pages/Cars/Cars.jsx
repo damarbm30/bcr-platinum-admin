@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { InnerSidebar } from "../../components";
 
 const Cars = () => {
   const Container = styled.main`
@@ -8,14 +9,17 @@ const Cars = () => {
   `;
 
   return (
-    <Container>
-      <div className="position-absolute" style={{ top: "54px" }}>
-        <p>Cars</p>
-        <p>Cars</p>
-        <p>Cars</p>
-        <p>Cars</p>
-      </div>
-    </Container>
+    <>
+      <InnerSidebar />
+      <Container>
+        <div className="position-absolute" style={{ top: "54px" }}>
+          <p>Cars</p>
+          <p>Cars</p>
+          <p>Cars</p>
+          <p>Cars</p>
+        </div>
+      </Container>
+    </>
   );
 };
 export default Cars;
