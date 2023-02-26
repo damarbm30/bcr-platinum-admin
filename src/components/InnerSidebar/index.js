@@ -1,3 +1,3 @@
 import InnerSidebar from "./InnerSidebar";
 
-export { InnerSidebar };
+export default InnerSidebar;
