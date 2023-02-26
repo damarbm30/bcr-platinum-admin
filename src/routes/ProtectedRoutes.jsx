@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { useRef, useLayoutEffect, useState } from "react";
 
 import { Navbar, Sidebar } from "../components";
+import { InnerSidebar } from "../components/InnerSidebar";
 
 const ProtectedRoutes = () => {
   const ref = useRef(null);
@@ -16,7 +17,10 @@ const ProtectedRoutes = () => {
       <Sidebar innerRef={ref} />
       <div className="w-100">
         <Navbar sidebarWidth={width} />
-        <Outlet />
+        <div className="d-flex">
+          <InnerSidebar />
+          <Outlet />
+        </div>
       </div>
     </div>
   );
