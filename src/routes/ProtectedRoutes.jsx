@@ -16,9 +16,7 @@ const ProtectedRoutes = () => {
       <Sidebar innerRef={ref} />
       <div className="w-100">
         <Navbar sidebarWidth={width} />
-        <div className="d-flex">
-          <Outlet />
-        </div>
+        <Outlet />
       </div>
     </div>
   );
