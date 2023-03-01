@@ -1,10 +1,14 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
+
+const isAuth = () => {
+  const admin = localStorage.getItem("adminCredential");
+
+  return admin ? true : false;
+};
 
 const PublicRoutes = () => {
-  return (
-    <>
-      <Outlet />
-    </>
-  );
+  const admin = isAuth();
+
+  return admin ? <Navigate to="/cars" replace /> : <Outlet />;
 };
 export default PublicRoutes;
