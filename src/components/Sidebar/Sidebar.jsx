@@ -1,14 +1,14 @@
 import styled from "styled-components";
 import { home, smallLogo, truck } from "../../assets";
 
-const Sidebar = ({ innerRef }) => {
-  const Container = styled.div`
-    background-color: var(--primaryBlue);
-    height: 100vh;
-    width: 70px;
-    z-index: 1050;
-  `;
+const Container = styled.div`
+  background-color: var(--primaryBlue);
+  height: 100vh;
+  width: 70px;
+  z-index: 1050;
+`;
 
+const Sidebar = ({ innerRef }) => {
   return (
     <Container>
       <div

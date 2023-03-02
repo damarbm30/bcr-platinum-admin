@@ -1,35 +1,43 @@
+import { useEffect } from "react";
 import styled from "styled-components";
 import { plus } from "../../assets";
 import { InnerSidebar } from "../../components";
+import { getCars } from "../../services/carServices";
 import Breadcrumb from "./Breadcrumb";
 
+const Content = styled.div`
+  position: relative;
+  width: 100%;
+  background-color: var(--background);
+`;
+
+const Button = styled.button`
+  background-color: var(--primaryBlue);
+  color: white;
+`;
+
+const CapacityButton = styled.button`
+  background-color: white;
+  color: var(--hoverBlue);
+  padding: 0.25em 0.5em;
+  border: 1px solid var(--hoverBlue);
+  border-radius: 4px;
+  font-weight: 500;
+  &:focus {
+    color: var(--primaryBlue);
+    border-color: var(--primaryBlue);
+    background-color: var(--hoverBlue);
+  }
+`;
+
+const PEOPLE_COUNT = ["All", "2 - 4 people", "4 - 6 people", "6 - 8 people"];
+
 const Cars = () => {
-  const Content = styled.div`
-    position: relative;
-    width: 100%;
-    background-color: var(--background);
-  `;
+  console.log(typeof localStorage.getItem("adminCredential"));
 
-  const Button = styled.button`
-    background-color: var(--primaryBlue);
-    color: white;
-  `;
-
-  const CapacityButton = styled.button`
-    background-color: white;
-    color: var(--hoverBlue);
-    padding: 0.25em 0.5em;
-    border: 1px solid var(--hoverBlue);
-    border-radius: 4px;
-    font-weight: 500;
-    &:focus {
-      color: var(--primaryBlue);
-      border-color: var(--primaryBlue);
-      background-color: var(--hoverBlue);
-    }
-  `;
-
-  const PEOPLE_COUNT = ["All", "2 - 4 people", "4 - 6 people", "6 - 8 people"];
+  useEffect(() => {
+    console.log(getCars());
+  }, []);
 
   return (
     <main className="d-flex w-100">

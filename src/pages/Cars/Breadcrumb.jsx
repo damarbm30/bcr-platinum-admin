@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-const Breadcrumb = () => {
-  const Wrapper = styled.div`
-    --bs-breadcrumb-divider: ">";
-  `;
+const Wrapper = styled.div`
+  --bs-breadcrumb-divider: ">";
+`;
 
+const Breadcrumb = () => {
   return (
     <Wrapper>
       <ul className="breadcrumb">

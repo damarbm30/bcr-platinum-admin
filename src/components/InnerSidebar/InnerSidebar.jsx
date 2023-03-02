@@ -1,17 +1,17 @@
 import styled from "styled-components";
 
+const Container = styled.div`
+  position: relative;
+  height: 100vh;
+  width: 220px;
+`;
+
+const Wrapper = styled.div`
+  position: absolute;
+  top: 54px;
+`;
+
 const InnerSidebar = () => {
-  const Container = styled.div`
-    position: relative;
-    height: 100vh;
-    width: 220px;
-  `;
-
-  const Wrapper = styled.div`
-    position: absolute;
-    top: 54px;
-  `;
-
   return (
     <Container>
       <Wrapper className="d-flex flex-column w-100 gap-3">
