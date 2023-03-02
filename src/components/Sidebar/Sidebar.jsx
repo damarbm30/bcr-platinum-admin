@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { home, smallLogo, truck } from "../../assets";
 
 const Container = styled.div`
+  position: fixed;
   background-color: var(--primaryBlue);
   height: 100vh;
   width: 70px;
