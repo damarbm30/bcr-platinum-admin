@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 import { plus } from "../../assets";
@@ -21,16 +22,36 @@ const CapacityButton = styled.button`
   border: 1px solid var(--hoverBlue);
   border-radius: 4px;
   font-weight: 500;
-  &:focus {
-    color: var(--primaryBlue);
-    border-color: var(--primaryBlue);
-    background-color: var(--hoverBlue);
-  }
 `;
 
 const PEOPLE_COUNT = ["All", "2 - 4 people", "4 - 6 people", "6 - 8 people"];
 
+const PeopleCapacity = ({ capacity, active, onCapacityChange }) => {
+  return (
+    <CapacityButton
+      style={
+        active === capacity
+          ? {
+              color: "var(--primaryBlue)",
+              borderColor: "var(--primaryBlue)",
+              backgroundColor: "var(--hoverBlue)",
+            }
+          : {}
+      }
+      onClick={() => onCapacityChange(capacity)}
+    >
+      {capacity}
+    </CapacityButton>
+  );
+};
+
 const Cars = () => {
+  const [active, setActive] = useState("All");
+
+  const onCapacityChange = (item) => {
+    setActive(item);
+  };
+
   return (
     <section
       className="d-flex min-h-100"
@@ -56,8 +77,17 @@ const Cars = () => {
               </Button>
             </div>
             <div className="d-flex gap-3">
-              {PEOPLE_COUNT.map((item, index) => {
-                return <CapacityButton key={index}>{item}</CapacityButton>;
+              {PEOPLE_COUNT.map((capacity, index) => {
+                return (
+                  <PeopleCapacity
+                    key={index}
+                    capacity={capacity}
+                    active={active}
+                    onCapacityChange={onCapacityChange}
+                  >
+                    {capacity}
+                  </PeopleCapacity>
+                );
               })}
             </div>
             <CarList />
