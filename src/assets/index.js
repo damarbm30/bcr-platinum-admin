@@ -10,6 +10,7 @@ import plus from "./plus.svg";
 import smallLogo from "./small-logo.svg";
 import trash from "./trash.svg";
 import truck from "./truck.svg";
+import people from "./people.svg";
 
 export {
   carVector,
@@ -24,4 +25,5 @@ export {
   smallLogo,
   trash,
   truck,
+  people,
 };
