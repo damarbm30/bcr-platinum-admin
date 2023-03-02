@@ -6,7 +6,7 @@ import { InnerSidebar, Breadcrumb } from "../../components";
 import CarList from "./CarList";
 
 const Content = styled.div`
-  max-width: 50%;
+  max-width: 60%;
   min-height: 100%;
 `;
 
