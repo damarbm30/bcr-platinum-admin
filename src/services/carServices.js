@@ -12,6 +12,8 @@ export const getCars = async (data) => {
     const category = data ? data : "";
 
     const result = await api.get(`/admin/v2/car?category=${category}`, header);
+
+    return result?.data?.cars;
   } catch (error) {
     console.log(error.message);
   }
