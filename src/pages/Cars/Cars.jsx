@@ -1,14 +1,12 @@
-import { useEffect } from "react";
 import styled from "styled-components";
+
 import { plus } from "../../assets";
-import { InnerSidebar } from "../../components";
-import { getCars } from "../../services/carServices";
-import Breadcrumb from "./Breadcrumb";
+import { InnerSidebar, Breadcrumb } from "../../components";
+import CarList from "./CarList";
 
 const Content = styled.div`
-  position: relative;
-  width: 100%;
-  background-color: var(--background);
+  max-width: 50%;
+  min-height: 100%;
 `;
 
 const Button = styled.button`
@@ -33,15 +31,21 @@ const CapacityButton = styled.button`
 const PEOPLE_COUNT = ["All", "2 - 4 people", "4 - 6 people", "6 - 8 people"];
 
 const Cars = () => {
-  useEffect(() => {
-    getCars();
-  }, []);
-
   return (
-    <main className="d-flex w-100">
+    <section
+      className="d-flex min-h-100"
+      style={{
+        position: "relative",
+        left: "280px",
+        width: "calc(100% - 280px)",
+      }}
+    >
       <InnerSidebar />
       <Content>
-        <div className="position-absolute w-100" style={{ top: "54px" }}>
+        <div
+          className="position-absolute w-100"
+          style={{ top: "54px", backgroundColor: "var(--background)" }}
+        >
           <div className="d-flex flex-column p-4 gap-4">
             <Breadcrumb />
             <div className="d-flex w-100 justify-content-between">
@@ -52,15 +56,15 @@ const Cars = () => {
               </Button>
             </div>
             <div className="d-flex gap-3">
-              {PEOPLE_COUNT.map((item) => {
-                return <CapacityButton>{item}</CapacityButton>;
+              {PEOPLE_COUNT.map((item, index) => {
+                return <CapacityButton key={index}>{item}</CapacityButton>;
               })}
             </div>
-            <p>Car List</p>
+            <CarList />
           </div>
         </div>
       </Content>
-    </main>
+    </section>
   );
 };
 export default Cars;
