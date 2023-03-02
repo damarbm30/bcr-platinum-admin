@@ -33,10 +33,8 @@ const CapacityButton = styled.button`
 const PEOPLE_COUNT = ["All", "2 - 4 people", "4 - 6 people", "6 - 8 people"];
 
 const Cars = () => {
-  console.log(typeof localStorage.getItem("adminCredential"));
-
   useEffect(() => {
-    console.log(getCars());
+    getCars();
   }, []);
 
   return (
