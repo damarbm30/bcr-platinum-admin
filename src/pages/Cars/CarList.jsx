@@ -23,7 +23,7 @@ const CarList = () => {
   return (
     <div className="container-fluid">
       <div className="row gap-5">
-        {carList.map((car) => {
+        {carList?.map((car) => {
           const { id, image, name, price, category, updatedAt } = car;
           return (
             <CarItem
