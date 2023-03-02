@@ -1,6 +1,15 @@
+import { useNavigate } from "react-router-dom";
+
 import { logo, menu } from "../../assets";
 
 const Navbar = ({ sidebarWidth }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("adminCredential");
+    navigate("/login");
+  };
+
   return (
     <nav
       className="navbar fixed-top shadow-sm bg-white"
@@ -34,9 +43,35 @@ const Navbar = ({ sidebarWidth }) => {
               Search
             </button>
           </form>
-          <div className="d-flex align-items-center gap-2">
-            <div>Logo</div>
-            <div>Nama</div>
+          <div className="d-flex align-items-center gap-2 px-5">
+            <div
+              className="rounded-circle d-flex justify-content-center align-items-center"
+              style={{
+                height: "30px",
+                width: "30px",
+                backgroundColor: "var(--hoverBlue)",
+              }}
+            >
+              <p className="fw-bold mb-0">A</p>
+            </div>
+            <div className="dropdown">
+              <button
+                className="btn dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Admin BCR
+              </button>
+              <div className="dropdown-menu">
+                <button
+                  className="dropdown-item"
+                  onClick={() => handleLogout()}
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
