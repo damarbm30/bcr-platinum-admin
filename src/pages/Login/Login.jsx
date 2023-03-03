@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
@@ -9,6 +10,8 @@ import LoginError from "./LoginError";
 
 const Login = () => {
   const [isError, setIsError] = useState(false);
+
+  const navigate = useNavigate();
 
   const schema = yup.object().shape({
     email: yup
@@ -25,7 +28,7 @@ const Login = () => {
   } = useForm({ resolver: yupResolver(schema) });
 
   const onSubmit = (data) => {
-    adminLogin(data, setIsError);
+    adminLogin(data, setIsError, navigate);
   };
 
   return (

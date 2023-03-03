@@ -1,13 +1,37 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
+import { useRef, useLayoutEffect, useState } from "react";
+
 import { Navbar, Sidebar } from "../components";
 
+const isAuth = () => {
+  const admin = localStorage.getItem("adminCredential");
+
+  return admin ? true : false;
+};
+
 const ProtectedRoutes = () => {
-  return (
-    <>
-      <Navbar />
-      <Sidebar />
-      <Outlet />
-    </>
+  const ref = useRef(null);
+  const [width, setWidth] = useState(0);
+
+  const admin = isAuth();
+
+  useLayoutEffect(() => {
+    setWidth(ref?.current?.offsetWidth);
+  }, []);
+
+  return admin ? (
+    <div className="d-flex h-100">
+      <Sidebar innerRef={ref} />
+      <div className="w-100">
+        <Navbar sidebarWidth={width} />
+        <div>
+          <Outlet />
+        </div>
+      </div>
+    </div>
+  ) : (
+    <Navigate to="/login" replace />
   );
 };
+
 export default ProtectedRoutes;
