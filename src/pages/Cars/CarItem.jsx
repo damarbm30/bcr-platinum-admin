@@ -11,6 +11,7 @@ const CarItem = ({ id, image, name, price, category, updatedAt }) => {
 
   const onDelete = (id) => {
     deleteCars(id);
+    
     async function asyncGetCars() {
       const result = await getCars();
       setCarList({
