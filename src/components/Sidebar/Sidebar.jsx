@@ -1,4 +1,6 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
+
 import { home, smallLogo, truck } from "../../assets";
 
 const Container = styled.div`
@@ -42,7 +44,8 @@ const Sidebar = ({ innerRef }) => {
           </div>
         </div>
         <div className="d-flex w-100 flex-column align-items-center justify-content-center">
-          <div
+          <Link
+            to="/cars"
             className="w-100 py-1"
             style={{ backgroundColor: "rgba(255,255,255,0.3)" }}
           >
@@ -52,7 +55,7 @@ const Sidebar = ({ innerRef }) => {
                 Cars
               </p>
             </button>
-          </div>
+          </Link>
         </div>
       </div>
     </Container>
