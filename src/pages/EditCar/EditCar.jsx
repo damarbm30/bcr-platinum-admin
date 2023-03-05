@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import { Breadcrumb, InnerSidebar } from "../../components";
-import { editCars } from "../../services/carServices";
+import { editCar } from "../../services/carServices";
 import useCar from "../../store/carList";
 
 const Wrapper = styled.div`
@@ -24,7 +24,7 @@ const EditCar = () => {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = async (data) => {
-    editCars(data, id);
+    editCar(data, id);
     navigate("/cars");
   };
 

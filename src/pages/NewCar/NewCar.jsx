@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 
 import { Breadcrumb, InnerSidebar } from "../../components";
-import { createCars } from "../../services/carServices";
+import { createCar } from "../../services/carServices";
 
 const Wrapper = styled.div`
   position: absolute;
@@ -16,7 +16,7 @@ const NewCar = () => {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = async (data) => {
-    createCars({ ...data, status: false });
+    createCar({ ...data, status: false });
     navigate("/cars");
   };
 

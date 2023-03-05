@@ -22,7 +22,7 @@ export const getCars = async (data) => {
   }
 };
 
-export const createCars = async (data) => {
+export const createCar = async (data) => {
   try {
     const header = {
       headers: {
@@ -47,7 +47,7 @@ export const createCars = async (data) => {
   }
 };
 
-export const editCars = async (data, id) => {
+export const editCar = async (data, id) => {
   try {
     const header = {
       headers: {
