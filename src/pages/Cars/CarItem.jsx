@@ -3,15 +3,15 @@ import moment from "moment/moment";
 import "moment/locale/id";
 
 import { clock, edit, people, trash } from "../../assets";
-import { deleteCars, getCars } from "../../services/carServices";
+import { deleteCar, getCars } from "../../services/carServices";
 import useCar from "../../store/carList";
 
 const CarItem = ({ id, image, name, price, category, updatedAt }) => {
   const setCarList = useCar((state) => state.setCarList);
 
   const onDelete = (id) => {
-    deleteCars(id);
-    
+    deleteCar(id);
+
     async function asyncGetCars() {
       const result = await getCars();
       setCarList({

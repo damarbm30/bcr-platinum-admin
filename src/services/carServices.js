@@ -72,7 +72,7 @@ export const editCars = async (data, id) => {
   }
 };
 
-export const deleteCars = async (id) => {
+export const deleteCar = async (id) => {
   try {
     const header = {
       headers: {
