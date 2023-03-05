@@ -1,18 +1,27 @@
-import { clock, people } from "../../assets";
+import { Link } from "react-router-dom";
+import moment from "moment/moment";
+import "moment/locale/id";
 
-const formattedDate = (updatedAt) => {
-  const dateUpdated = new Date(updatedAt);
-  const month = dateUpdated.toLocaleString("default", { month: "short" });
-
-  return (
-    <span>
-      {dateUpdated.getDay()} {month} {dateUpdated.getFullYear()},{" "}
-      {dateUpdated.getHours()}.{dateUpdated.getMinutes()}{" "}
-    </span>
-  );
-};
+import { clock, edit, people, trash } from "../../assets";
+import { deleteCars, getCars } from "../../services/carServices";
+import useCar from "../../store/carList";
 
 const CarItem = ({ id, image, name, price, category, updatedAt }) => {
+  const setCarList = useCar((state) => state.setCarList);
+
+  const onDelete = (id) => {
+    deleteCars(id);
+    async function asyncGetCars() {
+      const result = await getCars();
+      setCarList({
+        carList: result,
+        total: result?.length,
+      });
+    }
+
+    asyncGetCars();
+  };
+
   const formatter = new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -34,6 +43,8 @@ const CarItem = ({ id, image, name, price, category, updatedAt }) => {
       break;
   }
 
+  moment.locale("id");
+
   return (
     <div className="card" style={{ width: "350px" }}>
       <div className="card-body">
@@ -42,7 +53,13 @@ const CarItem = ({ id, image, name, price, category, updatedAt }) => {
             src={image}
             alt={name}
             width={270}
-            style={{ borderRadius: "4px" }}
+            h={160}
+            style={{
+              borderRadius: "4px",
+              objectFit: "fill",
+              width: "270px",
+              height: "160px",
+            }}
           />
         </div>
         <div className="d-flex flex-column gap-2 mb-4">
@@ -54,12 +71,25 @@ const CarItem = ({ id, image, name, price, category, updatedAt }) => {
           </div>
           <div className="d-flex gap-2">
             <img src={clock} alt="clock" />
-            <p className="mb-0">Updated at {formattedDate(updatedAt)}</p>
+            <p className="mb-0">
+              Updated at {moment(updatedAt).format("D MMM YYYY, HH.mm")}
+            </p>
           </div>
         </div>
         <div className="d-flex gap-3">
-          <button className="w-100 py-2 bg-transparent">Delete</button>
-          <button className="w-100 py-2">Edit</button>
+          <button
+            className="btn btn-outline-danger w-100 d-flex justify-content-center align-items-center gap-2"
+            onClick={() => onDelete(id)}
+          >
+            <img src={trash} alt="trash" />
+            <p className="mb-0">Delete</p>
+          </button>
+          <Link to={`/edit-car/${id}`} className="w-100">
+            <button className="btn btn-success w-100 d-flex justify-content-center align-items-center gap-2">
+              <img src={edit} alt="trash" />
+              <p className="mb-0">Edit</p>
+            </button>
+          </Link>
         </div>
       </div>
     </div>
