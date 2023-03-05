@@ -11,6 +11,7 @@ import smallLogo from "./small-logo.svg";
 import trash from "./trash.svg";
 import truck from "./truck.svg";
 import people from "./people.svg";
+import chevronRight from "./chevron-right.svg";
 
 export {
   carVector,
@@ -26,4 +27,5 @@ export {
   trash,
   truck,
   people,
+  chevronRight,
 };
