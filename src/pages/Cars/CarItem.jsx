@@ -6,22 +6,8 @@ import { clock, edit, people, trash } from "../../assets";
 import { deleteCar, getCars } from "../../services/carServices";
 import useCar from "../../store/carList";
 
-const CarItem = ({ id, image, name, price, category, updatedAt }) => {
+const CarItem = ({ id, image, name, price, category, updatedAt, onGetId }) => {
   const setCarList = useCar((state) => state.setCarList);
-
-  const onDelete = (id) => {
-    deleteCar(id);
-
-    async function asyncGetCars() {
-      const result = await getCars();
-      setCarList({
-        carList: result,
-        total: result?.length,
-      });
-    }
-
-    asyncGetCars();
-  };
 
   const formatter = new Intl.NumberFormat("id-ID", {
     style: "currency",
@@ -32,7 +18,7 @@ const CarItem = ({ id, image, name, price, category, updatedAt }) => {
   const formattedPrice = formatter.format(price);
   let peopleCap;
 
-  switch (category.toLowerCase()) {
+  switch (category?.toLowerCase()) {
     case "small":
       peopleCap = "2 - 4 people";
       break;
@@ -47,7 +33,7 @@ const CarItem = ({ id, image, name, price, category, updatedAt }) => {
   moment.locale("id");
 
   return (
-    <div className="card" style={{ width: "350px" }}>
+    <div className="card" style={{ width: "310px" }}>
       <div className="card-body">
         <div className="d-flex px-3 py-2 justify-content-center mb-4">
           <img
@@ -80,7 +66,9 @@ const CarItem = ({ id, image, name, price, category, updatedAt }) => {
         <div className="d-flex gap-3">
           <button
             className="btn btn-outline-danger w-100 d-flex justify-content-center align-items-center gap-2"
-            onClick={() => onDelete(id)}
+            data-bs-toggle="modal"
+            data-bs-target="#deleteModal"
+            onClick={() => onGetId(id)}
           >
             <img src={trash} alt="trash" />
             <p className="mb-0">Delete</p>
