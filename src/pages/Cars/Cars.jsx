@@ -6,6 +6,14 @@ import { plus } from "../../assets";
 import { InnerSidebar, Breadcrumb } from "../../components";
 import CarList from "./CarList";
 
+const Container = styled.div`
+  display: flex;
+  min-height: 100%;
+  position: relative;
+  left: 280px;
+  width: calc(100% - 280px);
+`;
+
 const Wrapper = styled.div`
   position: absolute;
   width: 100%;
@@ -57,19 +65,12 @@ const Cars = () => {
   };
 
   return (
-    <section
-      className="d-flex min-h-100"
-      style={{
-        position: "relative",
-        left: "280px",
-        width: "calc(100% - 280px)",
-      }}
-    >
-      <InnerSidebar />
+    <Container>
+      <InnerSidebar cars />
       <Wrapper>
         <div className="d-flex flex-column p-4 gap-4">
-          <Breadcrumb />
-          <div className="d-flex w-100 justify-content-between">
+          <Breadcrumb cars />
+          <div className="d-flex justify-content-between">
             <h4 className="fw-bold">List Car</h4>
             <Link to="/new-car" className="text-decoration-none text-white">
               <Button className="btn btn-primary outline-none border-0 d-flex px-3 py-2 align-items-center gap-2">
@@ -95,7 +96,7 @@ const Cars = () => {
           <CarList active={active} />
         </div>
       </Wrapper>
-    </section>
+    </Container>
   );
 };
 export default Cars;
