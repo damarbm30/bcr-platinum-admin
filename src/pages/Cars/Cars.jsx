@@ -71,12 +71,12 @@ const Cars = () => {
           <Breadcrumb />
           <div className="d-flex w-100 justify-content-between">
             <h4 className="fw-bold">List Car</h4>
-            <Button className="btn btn-primary outline-none border-0 d-flex px-3 py-2 align-items-center gap-2">
-              <img src={plus} alt="plus" />
-              <Link to="/new-car" className="text-decoration-none text-white">
+            <Link to="/new-car" className="text-decoration-none text-white">
+              <Button className="btn btn-primary outline-none border-0 d-flex px-3 py-2 align-items-center gap-2">
+                <img src={plus} alt="plus" />
                 Add New Car
-              </Link>
-            </Button>
+              </Button>
+            </Link>
           </div>
           <div className="d-flex gap-3">
             {PEOPLE_COUNT.map((capacity, index) => {
