@@ -4,9 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import { Breadcrumb, InnerSidebar } from "../../components";
-import { createCar, getCars } from "../../services/carServices";
+import { createCar } from "../../services/carServices";
 import { upload } from "../../assets";
-import useCar from "../../store/carList";
 
 const Wrapper = styled.div`
   position: absolute;
@@ -33,16 +32,8 @@ const NewCar = () => {
 
   const navigate = useNavigate();
 
-  const setCarList = useCar((state) => state.setCarList);
-
-  console.log("Line 38 watch", watch("image"));
-
   const onSubmit = async (data) => {
-    const result = await createCar(
-      { ...data, status: false },
-      getCars,
-      setCarList
-    );
+    const result = await createCar({ ...data, status: false });
 
     if (result.status === 201) {
       navigate("/cars");

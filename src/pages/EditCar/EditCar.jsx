@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import styled from "styled-components";
 
 import { Breadcrumb, InnerSidebar } from "../../components";
-import { editCar, getCars } from "../../services/carServices";
+import { editCar } from "../../services/carServices";
 import useCar from "../../store/carList";
 import { upload } from "../../assets";
 
@@ -33,13 +33,12 @@ const EditCar = () => {
   const navigate = useNavigate();
 
   const carList = useCar((state) => state.carList);
-  const setCarList = useCar((state) => state.setCarList);
   const current = carList.find((car) => car.id.toString() === id);
 
   const { register, handleSubmit } = useForm();
 
   const onSubmit = async (data) => {
-    const result = await editCar(data, id, getCars, setCarList);
+    const result = await editCar(data, id);
 
     if (result.status === 200) {
       navigate("/cars");
@@ -107,7 +106,13 @@ const EditCar = () => {
                   htmlFor="image"
                   className="d-flex justify-content-between col-4 border border-dark border-opacity-25 p-2 rounded"
                 >
-                  <p className="mb-0 text-muted">Upload Foto Mobil</p>
+                  {!watch("image") || watch("image").length === 0 ? (
+                    <p className="mb-0 text-muted">Upload Foto Mobil</p>
+                  ) : (
+                    <p className="mb-0 text-muted">
+                      {watch("image")[0].name.substring(0, 20)}...
+                    </p>
+                  )}
                   <input
                     type="file"
                     id="image"
