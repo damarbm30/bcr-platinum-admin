@@ -1,28 +1,68 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import { Breadcrumb, InnerSidebar } from "../../components";
-import { createCar } from "../../services/carServices";
+import { createCar, getCars } from "../../services/carServices";
+import { upload } from "../../assets";
+import useCar from "../../store/carList";
 
 const Wrapper = styled.div`
   position: absolute;
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 54px);
   top: 54px;
   background-color: var(--background);
 `;
 
+const SaveButton = styled.button`
+  background-color: var(--primaryBlue);
+  color: white;
+  border: 1px solid var(--primaryBlue);
+`;
+
+const CancelButton = styled.button`
+  background-color: transparent;
+  color: var(--primaryBlue);
+  border: 1px solid var(--primaryBlue);
+`;
+
 const NewCar = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, watch } = useForm();
+
+  const navigate = useNavigate();
+
+  const setCarList = useCar((state) => state.setCarList);
+
+  console.log("Line 38 watch", watch("image"));
 
   const onSubmit = async (data) => {
-    createCar({ ...data, status: false });
-    navigate("/cars");
+    const result = await createCar(
+      { ...data, status: false },
+      getCars,
+      setCarList
+    );
+
+    if (result.status === 201) {
+      navigate("/cars");
+      toast("Data Berhasil Disimpan", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+        className: "text-center bg-success text-white",
+      });
+    }
   };
 
   return (
     <section
-      className="d-flex min-h-100"
+      className="d-flex"
       style={{
         position: "relative",
         left: "280px",
@@ -34,41 +74,98 @@ const NewCar = () => {
         <div className="d-flex flex-column p-4 gap-4">
           <Breadcrumb newCar />
           <h3 className="fw-bold">Add New Car</h3>
-          <form className="bg-white p-4" onSubmit={handleSubmit(onSubmit)}>
-            <div className="">
-              <label htmlFor="name">Nama/Tipe Mobil</label>
-              <input type="text" id="name" {...register("name")} />
-            </div>
-            <div>
-              <label htmlFor="price">Harga</label>
-              <input type="text" id="price" {...register("price")} />
-            </div>
-            <div>
-              <label htmlFor="image">Foto</label>
-              <input type="file" id="image" {...register("image")} />
-            </div>
-            <div>
-              <label htmlFor="category">Kategori</label>
-              <select id="category" {...register("category")}>
-                <option value="" hidden>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="d-flex flex-column gap-3 bg-white p-4">
+              <div className="row align-items-center">
+                <label htmlFor="name" className="col-2">
+                  Nama/Tipe Mobil
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  {...register("name")}
+                  placeholder="Input Nama/Tipe Mobil"
+                  className="col-4 border border-dark border-opacity-25 p-1 rounded"
+                />
+              </div>
+              <div className="row align-items-center">
+                <label htmlFor="price" className="col-2">
+                  Harga
+                </label>
+                <input
+                  type="text"
+                  id="price"
+                  {...register("price")}
+                  placeholder="Input Harga Sewa Mobil"
+                  className="col-4 border border-dark border-opacity-25 p-1 rounded"
+                />
+              </div>
+              <div className="row align-items-center">
+                <label htmlFor="image" className="col-2">
+                  Foto
+                </label>
+                <label
+                  htmlFor="image"
+                  className="d-flex justify-content-between col-4 border border-dark border-opacity-25 p-2 rounded"
+                >
+                  {!watch("image") || watch("image").length === 0 ? (
+                    <p className="mb-0 text-muted">Upload Foto Mobil</p>
+                  ) : (
+                    <p className="mb-0 text-muted">
+                      {watch("image")[0].name.substring(0, 20)}...
+                    </p>
+                  )}
+                  <input
+                    type="file"
+                    id="image"
+                    {...register("image")}
+                    className="d-none"
+                  />
+                  <img src={upload} alt="upload" />
+                </label>
+              </div>
+              <div className="row align-items-center">
+                <label htmlFor="category" className="col-2">
                   Kategori
-                </option>
-                <option value="small">2 - 4 orang</option>
-                <option value="medium">4 - 6 orang</option>
-                <option value="large">6 - 8 orang</option>
-              </select>
+                </label>
+                <select
+                  id="category"
+                  {...register("category")}
+                  className="col-4 border border-dark border-opacity-25 p-1 rounded"
+                  style={{ color: "gray" }}
+                >
+                  <option value="" hidden>
+                    Pilih Kategori Mobil
+                  </option>
+                  <option value="small">2 - 4 orang</option>
+                  <option value="medium">4 - 6 orang</option>
+                  <option value="large">6 - 8 orang</option>
+                </select>
+              </div>
+              <div className="row align-items-center">
+                <p className="col-2 mb-0">Created at</p>
+                <span className="col-4">-</span>
+              </div>
+              <div className="row align-items-center">
+                <p className="col-2 mb-0">Updated at</p>
+                <span className="col-4">-</span>
+              </div>
             </div>
-            <div>
-              <p>Created at</p>
-              <span>-</span>
-            </div>
-            <div>
-              <p>Updated at</p>
-              <span>-</span>
-            </div>
-            <div>
-              <button type="submit">Save</button>
-              <button type="button">Cancel</button>
+            <div
+              className="d-flex position-absolute gap-3"
+              style={{ bottom: "40px" }}
+            >
+              <Link to="/cars">
+                <CancelButton className="btn px-3 fw-bold" type="button">
+                  Cancel
+                </CancelButton>
+              </Link>
+              <SaveButton
+                className="btn btn-primary border-0 px-3 fw-bold"
+                type="submit"
+              >
+                Save
+              </SaveButton>
             </div>
           </form>
         </div>
