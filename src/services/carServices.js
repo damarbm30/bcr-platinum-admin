@@ -22,7 +22,7 @@ export const getCars = async (data) => {
   }
 };
 
-export const createCar = async (data, getCars, setCarList) => {
+export const createCar = async (data) => {
   try {
     const header = {
       headers: {
@@ -42,18 +42,12 @@ export const createCar = async (data, getCars, setCarList) => {
     }
 
     return await api.post("/admin/car", formData, header);
-
-    const result = await getCars();
-    setCarList({
-      carList: result,
-      total: result?.length,
-    });
   } catch (error) {
     console.log(error.message);
   }
 };
 
-export const editCar = async (data, id, getCars, setCarList) => {
+export const editCar = async (data, id) => {
   try {
     const header = {
       headers: {
@@ -73,12 +67,6 @@ export const editCar = async (data, id, getCars, setCarList) => {
     }
 
     return await api.put(`/admin/car/${id}`, formData, header);
-
-    const result = await getCars();
-    setCarList({
-      carList: result,
-      total: result?.length,
-    });
   } catch (error) {
     console.log(error.message);
   }
