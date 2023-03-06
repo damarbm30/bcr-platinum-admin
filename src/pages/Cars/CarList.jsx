@@ -77,7 +77,7 @@ const CarList = ({ active }) => {
 
   return (
     <div className="container-fluid">
-      <div className="row gap-5 justify-content-center">
+      <div className="row gap-5">
         {filteredCarList?.map((car) => {
           const { id, image, name, price, category, updatedAt } = car;
           return (
