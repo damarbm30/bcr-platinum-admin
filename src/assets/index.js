@@ -1,4 +1,4 @@
-import carVector from "./car-vector.png";
+import carVector from "./car-vector.svg";
 import clock from "./clock.svg";
 import edit from "./edit.svg";
 import home from "./home.svg";
@@ -12,6 +12,7 @@ import trash from "./trash.svg";
 import truck from "./truck.svg";
 import people from "./people.svg";
 import chevronRight from "./chevron-right.svg";
+import upload from "./upload.svg";
 
 export {
   carVector,
@@ -28,4 +29,5 @@ export {
   truck,
   people,
   chevronRight,
+  upload,
 };
