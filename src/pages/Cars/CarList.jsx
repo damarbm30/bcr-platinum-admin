@@ -60,11 +60,11 @@ const CarList = ({ active }) => {
   }, [isSuccessDelete]);
 
   const handleDelete = async (carId) => {
-    setIsSuccess(false);
+    setIsSuccessDelete(false);
     const result = await deleteCar(carId);
 
     if (result.status === 200) {
-      setIsSuccess(true);
+      setIsSuccessDelete(true);
       toast("Data Berhasil Dihapus", {
         position: "top-center",
         autoClose: 3000,
