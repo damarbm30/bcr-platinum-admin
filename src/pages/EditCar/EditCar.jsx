@@ -35,7 +35,7 @@ const EditCar = () => {
   const carList = useCar((state) => state.carList);
   const current = carList.find((car) => car.id.toString() === id);
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, watch } = useForm();
 
   const onSubmit = async (data) => {
     const result = await editCar(data, id);
