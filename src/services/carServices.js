@@ -1,19 +1,11 @@
-import api from "./baseUrl";
+import api from "./config";
 
 export const getCars = async (data) => {
   try {
-    const header = {
-      headers: {
-        accept: "application/json",
-        access_token: JSON.parse(localStorage.getItem("adminCredential")),
-      },
-    };
-
     const category = data ? data : "";
 
     const result = await api.get(
-      `/admin/v2/car?category=${category}&pageSize=50`,
-      header
+      `/admin/v2/car?category=${category}&pageSize=50`
     );
 
     return result?.data?.cars;
@@ -24,13 +16,6 @@ export const getCars = async (data) => {
 
 export const createCar = async (data) => {
   try {
-    const header = {
-      headers: {
-        accept: "application/json",
-        access_token: JSON.parse(localStorage.getItem("adminCredential")),
-      },
-    };
-
     const formData = new FormData();
 
     for (const [key, value] of Object.entries(data)) {
@@ -41,7 +26,7 @@ export const createCar = async (data) => {
       }
     }
 
-    return await api.post("/admin/car", formData, header);
+    return await api.post("/admin/car", formData);
   } catch (error) {
     console.log(error.message);
   }
@@ -49,13 +34,6 @@ export const createCar = async (data) => {
 
 export const editCar = async (data, id) => {
   try {
-    const header = {
-      headers: {
-        accept: "application/json",
-        access_token: JSON.parse(localStorage.getItem("adminCredential")),
-      },
-    };
-
     const formData = new FormData();
 
     for (const [key, value] of Object.entries(data)) {
@@ -66,7 +44,7 @@ export const editCar = async (data, id) => {
       }
     }
 
-    return await api.put(`/admin/car/${id}`, formData, header);
+    return await api.put(`/admin/car/${id}`, formData);
   } catch (error) {
     console.log(error.message);
   }
@@ -74,14 +52,7 @@ export const editCar = async (data, id) => {
 
 export const deleteCar = async (id) => {
   try {
-    const header = {
-      headers: {
-        accept: "application/json",
-        access_token: JSON.parse(localStorage.getItem("adminCredential")),
-      },
-    };
-
-    return await api.delete(`/admin/car/${id}`, header);
+    return await api.delete(`/admin/car/${id}`);
   } catch (error) {
     console.log(error.message);
   }

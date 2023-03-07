@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
+import styled from "styled-components";
 
 import "react-toastify/dist/ReactToastify.css";
 import { getCars, deleteCar } from "../../services/carServices";
@@ -7,13 +8,20 @@ import useCar from "../../store/carList";
 import CarItem from "./CarItem";
 import DeleteModal from "./DeleteModal";
 
+const Wrapper = styled.div`
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 3rem;
+  justify-content: space-between;
+
+  @media (min-width: 1920px) {
+    grid-template-columns: auto auto auto auto;
+  }
+`;
+
 const CarList = ({ active }) => {
   const [carId, setCarId] = useState(null);
-  const [isSuccess, setIsSuccess] = useState({
-    add: false,
-    edit: false,
-    delete: false,
-  });
+  const [isSuccessDelete, setIsSuccessDelete] = useState(false);
 
   const carList = useCar((state) => state.carList);
   const setCarList = useCar((state) => state.setCarList);
@@ -49,14 +57,14 @@ const CarList = ({ active }) => {
     // if (isSuccess.add || isSuccess.edit || isSuccess.delete) {
     getCarsAsync();
     // }
-  }, [isSuccess.add, isSuccess.edit, isSuccess.delete]);
+  }, [isSuccessDelete]);
 
   const handleDelete = async (carId) => {
-    setIsSuccess({ ...isSuccess, delete: false });
+    setIsSuccess(false);
     const result = await deleteCar(carId);
 
     if (result.status === 200) {
-      setIsSuccess({ ...isSuccess, delete: true });
+      setIsSuccess(true);
       toast("Data Berhasil Dihapus", {
         position: "top-center",
         autoClose: 3000,
@@ -76,8 +84,8 @@ const CarList = ({ active }) => {
   };
 
   return (
-    <div className="container-fluid">
-      <div className="row gap-5">
+    <div className="container-fluid p-0">
+      <Wrapper>
         {filteredCarList?.map((car) => {
           const { id, image, name, price, category, updatedAt } = car;
           return (
@@ -93,7 +101,7 @@ const CarList = ({ active }) => {
             />
           );
         })}
-      </div>
+      </Wrapper>
       <DeleteModal carId={carId} onDelete={handleDelete} />
       <ToastContainer closeButton={false} />
     </div>

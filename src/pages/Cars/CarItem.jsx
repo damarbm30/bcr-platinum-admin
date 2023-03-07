@@ -33,7 +33,7 @@ const CarItem = ({ id, image, name, price, category, updatedAt, onGetId }) => {
   moment.locale("id");
 
   return (
-    <div className="card" style={{ width: "310px" }}>
+    <div className="card" style={{ width: "350px" }}>
       <div className="card-body">
         <div className="d-flex px-3 py-2 justify-content-center mb-4">
           <img
