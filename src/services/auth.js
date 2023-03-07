@@ -1,4 +1,4 @@
-import api from "./baseUrl";
+import api from "./config";
 
 export const adminLogin = async (data, setIsError, navigate) => {
   try {
