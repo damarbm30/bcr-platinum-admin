@@ -5,7 +5,7 @@ import { logo, menu } from "../../assets";
 const Navbar = ({ sidebarWidth }) => {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const onLogout = () => {
     localStorage.removeItem("adminCredential");
     navigate("/login");
   };
@@ -64,10 +64,7 @@ const Navbar = ({ sidebarWidth }) => {
                 Admin BCR
               </button>
               <div className="dropdown-menu">
-                <button
-                  className="dropdown-item"
-                  onClick={() => handleLogout()}
-                >
+                <button className="dropdown-item" onClick={() => onLogout()}>
                   Logout
                 </button>
               </div>

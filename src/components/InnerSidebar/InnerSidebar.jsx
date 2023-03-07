@@ -12,18 +12,20 @@ const Wrapper = styled.div`
   top: 54px;
 `;
 
-const InnerSidebar = () => {
+const InnerSidebar = ({ cars }) => {
   return (
     <Container>
       <Wrapper className="d-flex flex-column w-100 gap-3">
         <div className="mt-3 px-3 py-2">
-          <p className="text-muted fw-bold mb-0">CARS</p>
+          <p className="text-muted fw-bold mb-0 text-uppercase">
+            {cars ? "Cars" : "Dashboard"}
+          </p>
         </div>
         <div
           className="mt-3 px-3 py-2"
           style={{ backgroundColor: "var(--hoverBlue)" }}
         >
-          <p className="fw-bold mb-0">List Car</p>
+          <p className="fw-bold mb-0">{cars ? "List Car" : "Dashboard"}</p>
         </div>
       </Wrapper>
     </Container>

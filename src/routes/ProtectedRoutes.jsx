@@ -20,7 +20,7 @@ const ProtectedRoutes = () => {
   }, []);
 
   return admin ? (
-    <div className="d-flex h-100">
+    <div className="d-flex h-25">
       <Sidebar innerRef={ref} />
       <div className="w-100">
         <Navbar sidebarWidth={width} />

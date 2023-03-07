@@ -1,13 +1,25 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import { plus } from "../../assets";
 import { InnerSidebar, Breadcrumb } from "../../components";
 import CarList from "./CarList";
 
-const Content = styled.div`
-  max-width: 60%;
+const Container = styled.div`
+  display: flex;
   min-height: 100%;
+  position: relative;
+  left: 280px;
+  width: calc(100% - 280px);
+`;
+
+const Wrapper = styled.div`
+  position: absolute;
+  width: 100%;
+  min-height: 100vh;
+  top: 54px;
+  background-color: var(--background);
 `;
 
 const Button = styled.button`
@@ -48,53 +60,43 @@ const PeopleCapacity = ({ capacity, active, onCapacityChange }) => {
 const Cars = () => {
   const [active, setActive] = useState("All");
 
-  const onCapacityChange = (item) => {
+  const handleCapacityChange = (item) => {
     setActive(item);
   };
 
   return (
-    <section
-      className="d-flex min-h-100"
-      style={{
-        position: "relative",
-        left: "280px",
-        width: "calc(100% - 280px)",
-      }}
-    >
-      <InnerSidebar />
-      <Content>
-        <div
-          className="position-absolute w-100"
-          style={{ top: "54px", backgroundColor: "var(--background)" }}
-        >
-          <div className="d-flex flex-column p-4 gap-4">
-            <Breadcrumb />
-            <div className="d-flex w-100 justify-content-between">
-              <h4 className="fw-bold">List Car</h4>
+    <Container>
+      <InnerSidebar cars />
+      <Wrapper>
+        <div className="d-flex flex-column p-4 gap-4">
+          <Breadcrumb cars />
+          <div className="d-flex justify-content-between">
+            <h4 className="fw-bold">List Car</h4>
+            <Link to="/new-car" className="text-decoration-none text-white">
               <Button className="btn btn-primary outline-none border-0 d-flex px-3 py-2 align-items-center gap-2">
                 <img src={plus} alt="plus" />
-                <p className="mb-0">Add New Car</p>
+                Add New Car
               </Button>
-            </div>
-            <div className="d-flex gap-3">
-              {PEOPLE_COUNT.map((capacity, index) => {
-                return (
-                  <PeopleCapacity
-                    key={index}
-                    capacity={capacity}
-                    active={active}
-                    onCapacityChange={onCapacityChange}
-                  >
-                    {capacity}
-                  </PeopleCapacity>
-                );
-              })}
-            </div>
-            <CarList />
+            </Link>
           </div>
+          <div className="d-flex gap-3">
+            {PEOPLE_COUNT.map((capacity, index) => {
+              return (
+                <PeopleCapacity
+                  key={index}
+                  capacity={capacity}
+                  active={active}
+                  onCapacityChange={handleCapacityChange}
+                >
+                  {capacity}
+                </PeopleCapacity>
+              );
+            })}
+          </div>
+          <CarList active={active} />
         </div>
-      </Content>
-    </section>
+      </Wrapper>
+    </Container>
   );
 };
 export default Cars;
