@@ -1,8 +1,21 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { logo, menu } from "../../assets";
+import useCar from "../../store/carList";
 
 const Navbar = ({ sidebarWidth }) => {
+  const [searchValue, setSearchValue] = useState("");
+
+  const carList = useCar((state) => state.carList);
+
+  const filteredCarList = carList.filter((car) =>
+    car?.name?.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
+  console.log("Search value: ", searchValue);
+  console.log("Search result: ", filteredCarList);
+
   const navigate = useNavigate();
 
   const onLogout = () => {
@@ -31,6 +44,8 @@ const Navbar = ({ sidebarWidth }) => {
               type="search"
               placeholder="Search"
               aria-label="Search"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
             />
             <button
               className="btn fw-bold"
@@ -52,7 +67,7 @@ const Navbar = ({ sidebarWidth }) => {
                 backgroundColor: "var(--hoverBlue)",
               }}
             >
-              <p className="fw-bold mb-0">A</p>
+              <p className="fw-bold ">A</p>
             </div>
             <div className="dropdown">
               <button
