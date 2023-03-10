@@ -7,6 +7,7 @@ import { getCars, deleteCar } from "../../services/carServices";
 import useCar from "../../store/carList";
 import CarItem from "./CarItem";
 import DeleteModal from "./DeleteModal";
+import useSearch from "../../store/searchResult";
 
 const Wrapper = styled.div`
   display: grid;
@@ -33,8 +34,10 @@ const CarList = ({ active }) => {
   const [carId, setCarId] = useState(null);
   const [isSuccessDelete, setIsSuccessDelete] = useState(false);
 
-  const carList = useCar((state) => state.carList);
   const setCarList = useCar((state) => state.setCarList);
+
+  const searchResult = useSearch((state) => state.searchResult);
+  const setSearchResult = useSearch((state) => state.setSearchResult);
 
   let peopleCap;
 
@@ -52,18 +55,8 @@ const CarList = ({ active }) => {
 
   const filteredCarList =
     active !== "All"
-      ? carList.filter((car) => car.category.toLowerCase() === peopleCap)
-      : carList;
-
-  const search = (cars) => {
-    return cars.filter((car) => {
-      if (car.category.toLowerCase() === peopleCap) {
-        return car?.name?.toLowerCase().includes(searchValue.toLowerCase());
-      } else {
-        return car?.name?.toLowerCase().includes(searchValue.toLowerCase());
-      }
-    });
-  };
+      ? searchResult.filter((car) => car.category.toLowerCase() === peopleCap)
+      : searchResult;
 
   useEffect(() => {
     async function getCarsAsync() {
@@ -72,11 +65,13 @@ const CarList = ({ active }) => {
         carList: result,
         total: result?.length,
       });
+      setSearchResult({
+        searchResult: result,
+        total: result?.length,
+      });
     }
 
-    // if (isSuccess.add || isSuccess.edit || isSuccess.delete) {
     getCarsAsync();
-    // }
   }, [isSuccessDelete]);
 
   const handleDelete = async (carId) => {

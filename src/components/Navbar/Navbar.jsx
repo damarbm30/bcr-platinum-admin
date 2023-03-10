@@ -1,20 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { logo, menu } from "../../assets";
 import useCar from "../../store/carList";
+import useSearch from "../../store/searchResult";
 
 const Navbar = ({ sidebarWidth }) => {
   const [searchValue, setSearchValue] = useState("");
 
   const carList = useCar((state) => state.carList);
 
+  const setSearchResult = useSearch((state) => state.setSearchResult);
+
   const filteredCarList = carList.filter((car) =>
     car?.name?.toLowerCase().includes(searchValue.toLowerCase())
   );
 
-  console.log("Search value: ", searchValue);
-  console.log("Search result: ", filteredCarList);
+  useEffect(() => {
+    setSearchResult({
+      searchResult: filteredCarList,
+      total: filteredCarList?.length,
+    });
+  }, []);
+
+  const onSearch = () => {
+    setSearchResult({
+      searchResult: filteredCarList,
+      total: filteredCarList?.length,
+    });
+  };
 
   const navigate = useNavigate();
 
@@ -49,11 +63,12 @@ const Navbar = ({ sidebarWidth }) => {
             />
             <button
               className="btn fw-bold"
-              type="submit"
+              type="button"
               style={{
                 color: "var(--primaryBlue)",
                 borderColor: "var(--primaryBlue)",
               }}
+              onClick={() => onSearch()}
             >
               Search
             </button>
