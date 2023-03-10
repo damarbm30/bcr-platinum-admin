@@ -3,12 +3,8 @@ import moment from "moment/moment";
 import "moment/locale/id";
 
 import { clock, edit, people, trash } from "../../assets";
-import { deleteCar, getCars } from "../../services/carServices";
-import useCar from "../../store/carList";
 
 const CarItem = ({ id, image, name, price, category, updatedAt, onGetId }) => {
-  const setCarList = useCar((state) => state.setCarList);
-
   const formatter = new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -33,7 +29,7 @@ const CarItem = ({ id, image, name, price, category, updatedAt, onGetId }) => {
   moment.locale("id");
 
   return (
-    <div className="card" style={{ width: "350px" }}>
+    <div className="card w-100">
       <div className="card-body">
         <div className="d-flex px-3 py-2 justify-content-center mb-4">
           <img
@@ -50,15 +46,15 @@ const CarItem = ({ id, image, name, price, category, updatedAt, onGetId }) => {
           />
         </div>
         <div className="d-flex flex-column gap-2 mb-4">
-          <p className="mb-0">{name}</p>
-          <p className="mb-0 fw-bold">{formattedPrice} / hari</p>
+          <p className="">{name}</p>
+          <p className=" fw-bold">{formattedPrice} / hari</p>
           <div className="d-flex gap-2">
             <img src={people} alt="people" />
-            <p className="mb-0">{peopleCap}</p>
+            <p className="">{peopleCap}</p>
           </div>
           <div className="d-flex gap-2">
             <img src={clock} alt="clock" />
-            <p className="mb-0">
+            <p className="">
               Updated at {moment(updatedAt).format("D MMM YYYY, HH.mm")}
             </p>
           </div>
@@ -71,12 +67,12 @@ const CarItem = ({ id, image, name, price, category, updatedAt, onGetId }) => {
             onClick={() => onGetId(id)}
           >
             <img src={trash} alt="trash" />
-            <p className="mb-0">Delete</p>
+            <p className="">Delete</p>
           </button>
           <Link to={`/edit-car/${id}`} className="w-100">
             <button className="btn btn-success w-100 d-flex justify-content-center align-items-center gap-2">
               <img src={edit} alt="trash" />
-              <p className="mb-0">Edit</p>
+              <p className="">Edit</p>
             </button>
           </Link>
         </div>
