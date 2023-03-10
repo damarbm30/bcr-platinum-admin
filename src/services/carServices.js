@@ -1,12 +1,8 @@
 import api from "./config";
 
-export const getCars = async (data) => {
+export const getCars = async () => {
   try {
-    const category = data ? data : "";
-
-    const result = await api.get(
-      `/admin/v2/car?category=${category}&pageSize=50`
-    );
+    const result = await api.get(`/admin/v2/car?pageSize=50`);
 
     return result?.data?.cars;
   } catch (error) {
