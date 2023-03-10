@@ -100,9 +100,9 @@ const NewCar = () => {
                   className="d-flex justify-content-between col-4 border border-dark border-opacity-25 p-2 rounded"
                 >
                   {!watch("image") || watch("image").length === 0 ? (
-                    <p className="mb-0 text-muted">Upload Foto Mobil</p>
+                    <p className="text-muted">Upload Foto Mobil</p>
                   ) : (
-                    <p className="mb-0 text-muted">
+                    <p className="text-muted">
                       {watch("image")[0].name.substring(0, 20)}...
                     </p>
                   )}
@@ -134,11 +134,11 @@ const NewCar = () => {
                 </select>
               </div>
               <div className="row align-items-center">
-                <p className="col-2 mb-0">Created at</p>
+                <p className="col-2 ">Created at</p>
                 <span className="col-4">-</span>
               </div>
               <div className="row align-items-center">
-                <p className="col-2 mb-0">Updated at</p>
+                <p className="col-2 ">Updated at</p>
                 <span className="col-4">-</span>
               </div>
             </div>

@@ -31,7 +31,7 @@ const DeleteModal = ({ carId, onDelete }) => {
             <img src={carVector} alt="car-vector" width={150} height={120} />
           </div>
           <h6 className="mb-0">Menghapus Data Mobil</h6>
-          <p className="mb-0 text-center">
+          <p className="text-center">
             Setelah dihapus, data mobil tidak dapat dikembalikan. Yakin ingin
             menghapus?
           </p>
