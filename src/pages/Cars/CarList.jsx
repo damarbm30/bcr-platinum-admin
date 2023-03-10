@@ -10,12 +10,22 @@ import DeleteModal from "./DeleteModal";
 
 const Wrapper = styled.div`
   display: grid;
-  grid-template-columns: auto auto auto;
-  gap: 3rem;
-  justify-content: space-between;
+  grid-template-columns: auto;
+  gap: 2rem;
+  justify-content: start;
 
-  @media (min-width: 1920px) {
+  @media (min-width: 1024px) {
+    grid-template-columns: auto auto;
+  }
+
+  @media (min-width: 1280px) {
+    grid-template-columns: auto auto auto;
+    justify-content: space-between;
+  }
+
+  @media (min-width: 1600px) {
     grid-template-columns: auto auto auto auto;
+    justify-content: space-between;
   }
 `;
 
@@ -44,6 +54,16 @@ const CarList = ({ active }) => {
     active !== "All"
       ? carList.filter((car) => car.category.toLowerCase() === peopleCap)
       : carList;
+
+  const search = (cars) => {
+    return cars.filter((car) => {
+      if (car.category.toLowerCase() === peopleCap) {
+        return car?.name?.toLowerCase().includes(searchValue.toLowerCase());
+      } else {
+        return car?.name?.toLowerCase().includes(searchValue.toLowerCase());
+      }
+    });
+  };
 
   useEffect(() => {
     async function getCarsAsync() {
