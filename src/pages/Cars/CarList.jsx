@@ -21,12 +21,10 @@ const Wrapper = styled.div`
 
   @media (min-width: 1280px) {
     grid-template-columns: auto auto auto;
-    justify-content: space-between;
   }
 
   @media (min-width: 1600px) {
     grid-template-columns: auto auto auto auto;
-    justify-content: space-between;
   }
 `;
 
@@ -34,10 +32,10 @@ const CarList = ({ active }) => {
   const [carId, setCarId] = useState(null);
   const [isSuccessDelete, setIsSuccessDelete] = useState(false);
 
+  const carList = useCar((state) => state.carList);
   const setCarList = useCar((state) => state.setCarList);
 
   const searchResult = useSearch((state) => state.searchResult);
-  const setSearchResult = useSearch((state) => state.setSearchResult);
 
   let peopleCap;
 
@@ -53,20 +51,24 @@ const CarList = ({ active }) => {
       break;
   }
 
-  const filteredCarList =
-    active !== "All"
-      ? searchResult.filter((car) => car.category.toLowerCase() === peopleCap)
-      : searchResult;
+  const filteredCarList = (cars) => {
+    return cars.filter((car) => {
+      if (active !== "All") {
+        return (
+          car?.name?.toLowerCase().includes(searchResult?.toLowerCase()) &&
+          car.category.toLowerCase() === peopleCap
+        );
+      } else {
+        return car?.name?.toLowerCase().includes(searchResult?.toLowerCase());
+      }
+    });
+  };
 
   useEffect(() => {
     async function getCarsAsync() {
       const result = await getCars();
       setCarList({
         carList: result,
-        total: result?.length,
-      });
-      setSearchResult({
-        searchResult: result,
         total: result?.length,
       });
     }
@@ -101,7 +103,7 @@ const CarList = ({ active }) => {
   return (
     <div className="container-fluid p-0">
       <Wrapper>
-        {filteredCarList?.map((car) => {
+        {filteredCarList(carList)?.map((car) => {
           const { id, image, name, price, category, updatedAt } = car;
           return (
             <CarItem
