@@ -8,25 +8,11 @@ import useSearch from "../../store/searchResult";
 const Navbar = ({ sidebarWidth }) => {
   const [searchValue, setSearchValue] = useState("");
 
-  const carList = useCar((state) => state.carList);
-
   const setSearchResult = useSearch((state) => state.setSearchResult);
-
-  const filteredCarList = carList.filter((car) =>
-    car?.name?.toLowerCase().includes(searchValue.toLowerCase())
-  );
-
-  useEffect(() => {
-    setSearchResult({
-      searchResult: filteredCarList,
-      total: filteredCarList?.length,
-    });
-  }, []);
 
   const onSearch = () => {
     setSearchResult({
-      searchResult: filteredCarList,
-      total: filteredCarList?.length,
+      searchResult: searchValue,
     });
   };
 

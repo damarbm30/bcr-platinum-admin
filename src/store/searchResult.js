@@ -4,12 +4,10 @@ import { persist } from "zustand/middleware";
 const useSearch = create(
   persist(
     (set) => ({
-      total: 0,
-      searchResult: [],
+      searchResult: "",
       setSearchResult: (state) => {
         set(() => ({
           searchResult: state.searchResult,
-          total: state.total,
         }));
       },
     }),
