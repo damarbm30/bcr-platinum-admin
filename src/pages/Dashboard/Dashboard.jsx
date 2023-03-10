@@ -1,20 +1,12 @@
 import styled from "styled-components";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Label,
-} from "recharts";
-import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import moment from "moment/moment";
+import { useState } from "react";
 
+import { getDailyOrders } from "../../services/orderServices";
 import { InnerSidebar, Breadcrumb } from "../../components";
-import useOrder from "../../store/orderList";
-import { getOrders } from "../../services/orderServices";
+import Chart from "./Chart";
+import OrderTable from "./OrderTable";
 
 const Container = styled.div`
   display: flex;
@@ -32,21 +24,45 @@ const Wrapper = styled.div`
   background-color: var(--background);
 `;
 
+const MONTHS_LIST = [];
+
 const Dashboard = () => {
-  const orderList = useOrder((state) => state.orderList);
-  const setOrderList = useOrder((state) => state.setOrderList);
+  const { register, handleSubmit } = useForm();
+  const [orderList, setOrderList] = useState([]);
+  const [month, setMonth] = useState(null);
 
-  useEffect(() => {
-    async function getOrdersAsync() {
-      const result = await getOrders();
-      setOrderList({
-        orderList: result,
-        total: result?.length,
-      });
+  const onSubmit = async (data) => {
+    const result = await getDailyOrders(data);
+    setOrderList(result);
+  };
+
+  const activeMonth = moment(month?.split(",")[0]).format("MMMM");
+
+  moment.locale("en");
+
+  for (let i = 0; i < 12; i++) {
+    const month = moment().subtract(i, "month").format("MMMM - YYYY");
+    const startOfMonth = moment()
+      .subtract(i, "month")
+      .startOf("month")
+      .format("YYYY-MM-DD");
+    const endOfMonth = moment()
+      .subtract(i, "month")
+      .endOf("month")
+      .format("YYYY-MM-DD");
+
+    let monthObj = {
+      month: month,
+      firstDate: startOfMonth,
+      lastDate: endOfMonth,
+    };
+
+    if (MONTHS_LIST.length >= 12) {
+      break;
+    } else {
+      MONTHS_LIST.push(monthObj);
     }
-
-    getOrdersAsync();
-  }, []);
+  }
 
   return (
     <Container>
@@ -54,34 +70,74 @@ const Dashboard = () => {
       <Wrapper>
         <div className="d-flex flex-column p-4 gap-4">
           <Breadcrumb dashboard />
-          <ResponsiveContainer width="100%" height={400}>
-            <BarChart
-              width={500}
-              height={300}
-              data={orderList}
-              margin={{ top: 0, right: 30, left: 30, bottom: 30 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis
-                dataKey={(day) => moment(day.day, "YYYY/MM/DD").format("DD")}
-                label={{
-                  value: "Date",
-                  position: "bottom",
+          <div>
+            <div className="d-flex gap-2 mb-2">
+              <div
+                style={{
+                  width: "4px",
+                  height: "24px",
+                  backgroundColor: "var(--primaryBlue)",
                 }}
               />
-              <YAxis>
-                <Label
-                  position="left"
-                  angle={-90}
-                  style={{ textAnchor: "middle" }}
+              <p className="fw-bold">Rented Car Data Visualization</p>
+            </div>
+            <div className="mb-4">
+              <p className="mb-2">Month</p>
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="d-flex col-2 align-items-center"
+              >
+                <select
+                  {...register("date")}
+                  className="w-100 border border-dark border-opacity-25 p-1"
+                  style={{ height: "50px" }}
+                  onChange={(e) => setMonth(e.target.value)}
                 >
-                  Amount of Cars Rented
-                </Label>
-              </YAxis>
-              <Tooltip />
-              <Bar dataKey="orderCount" fill="#586B90" />
-            </BarChart>
-          </ResponsiveContainer>
+                  <option value="" hidden>
+                    Pilih Bulan
+                  </option>
+                  {MONTHS_LIST.map((item, index) => {
+                    const { month, firstDate, lastDate } = item;
+
+                    return (
+                      <option
+                        key={index}
+                        name={month}
+                        value={`${firstDate}, ${lastDate}`}
+                      >
+                        {month}
+                      </option>
+                    );
+                  })}
+                </select>
+                <button
+                  className="text-white py-1 border border-dark border-opacity-25 px-3 rounded-end"
+                  style={{
+                    backgroundColor: "var(--primaryBlue)",
+                    height: "50px",
+                  }}
+                  type="submit"
+                >
+                  Go
+                </button>
+              </form>
+            </div>
+            <Chart data={orderList} />
+          </div>
+          <div>
+            <h5 className="fw-bold mb-3">Dashboard</h5>
+            <div className="d-flex gap-2 mb-2">
+              <div
+                style={{
+                  width: "4px",
+                  height: "24px",
+                  backgroundColor: "var(--primaryBlue)",
+                }}
+              />
+              <p className="fw-bold">List Order</p>
+            </div>
+            <OrderTable activeMonth={activeMonth} orderList={orderList} />
+          </div>
         </div>
       </Wrapper>
     </Container>
