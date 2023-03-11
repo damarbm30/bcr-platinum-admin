@@ -7,14 +7,23 @@ import { getCars, deleteCar } from "../../services/carServices";
 import useCar from "../../store/carList";
 import CarItem from "./CarItem";
 import DeleteModal from "./DeleteModal";
+import useSearch from "../../store/searchResult";
 
 const Wrapper = styled.div`
   display: grid;
-  grid-template-columns: auto auto auto;
-  gap: 3rem;
-  justify-content: space-between;
+  grid-template-columns: auto;
+  gap: 2rem;
+  justify-content: start;
 
-  @media (min-width: 1920px) {
+  @media (min-width: 1024px) {
+    grid-template-columns: auto auto;
+  }
+
+  @media (min-width: 1280px) {
+    grid-template-columns: auto auto auto;
+  }
+
+  @media (min-width: 1600px) {
     grid-template-columns: auto auto auto auto;
   }
 `;
@@ -25,6 +34,8 @@ const CarList = ({ active }) => {
 
   const carList = useCar((state) => state.carList);
   const setCarList = useCar((state) => state.setCarList);
+
+  const searchResult = useSearch((state) => state.searchResult);
 
   let peopleCap;
 
@@ -40,10 +51,18 @@ const CarList = ({ active }) => {
       break;
   }
 
-  const filteredCarList =
-    active !== "All"
-      ? carList.filter((car) => car.category.toLowerCase() === peopleCap)
-      : carList;
+  const filteredCarList = (cars) => {
+    return cars.filter((car) => {
+      if (active !== "All") {
+        return (
+          car?.name?.toLowerCase().includes(searchResult?.toLowerCase()) &&
+          car.category.toLowerCase() === peopleCap
+        );
+      } else {
+        return car?.name?.toLowerCase().includes(searchResult?.toLowerCase());
+      }
+    });
+  };
 
   useEffect(() => {
     async function getCarsAsync() {
@@ -54,17 +73,15 @@ const CarList = ({ active }) => {
       });
     }
 
-    // if (isSuccess.add || isSuccess.edit || isSuccess.delete) {
     getCarsAsync();
-    // }
   }, [isSuccessDelete]);
 
   const handleDelete = async (carId) => {
-    setIsSuccess(false);
+    setIsSuccessDelete(false);
     const result = await deleteCar(carId);
 
     if (result.status === 200) {
-      setIsSuccess(true);
+      setIsSuccessDelete(true);
       toast("Data Berhasil Dihapus", {
         position: "top-center",
         autoClose: 3000,
@@ -86,7 +103,7 @@ const CarList = ({ active }) => {
   return (
     <div className="container-fluid p-0">
       <Wrapper>
-        {filteredCarList?.map((car) => {
+        {filteredCarList(carList)?.map((car) => {
           const { id, image, name, price, category, updatedAt } = car;
           return (
             <CarItem

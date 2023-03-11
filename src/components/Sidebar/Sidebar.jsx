@@ -33,7 +33,7 @@ const Sidebar = ({ innerRef }) => {
           >
             <button className="border-0 p-2 bg-transparent w-100">
               <img src={home} alt="truck" />
-              <p className="text-white mb-0" style={{ fontSize: "0.75rem" }}>
+              <p className="text-white" style={{ fontSize: "0.75rem" }}>
                 Dashboard
               </p>
             </button>
@@ -51,7 +51,7 @@ const Sidebar = ({ innerRef }) => {
           >
             <button className="border-0 p-2 bg-transparent w-100">
               <img src={truck} alt="truck" />
-              <p className="text-white mb-0" style={{ fontSize: "0.75rem" }}>
+              <p className="text-white " style={{ fontSize: "0.75rem" }}>
                 Cars
               </p>
             </button>

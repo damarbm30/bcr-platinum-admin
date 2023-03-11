@@ -9,6 +9,6 @@ const isAuth = () => {
 const PublicRoutes = () => {
   const admin = isAuth();
 
-  return admin ? <Navigate to="/cars" replace /> : <Outlet />;
+  return admin ? <Navigate to="/dashboard" replace /> : <Outlet />;
 };
 export default PublicRoutes;
