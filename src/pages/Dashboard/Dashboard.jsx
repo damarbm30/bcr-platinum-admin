@@ -30,13 +30,9 @@ const MONTHS_LIST = [];
 
 const Dashboard = () => {
   const { register, handleSubmit } = useForm();
-  // const [month, setMonth] = useState(null);
 
-  const orderList = useOrder((state) => state.orderList);
-  const setOrderList = useOrder((state) => state.setOrderList);
-
-  const month = useMonth((state) => state.month);
-  const setMonth = useMonth((state) => state.setMonth);
+  const { orderList, setOrderList } = useOrder((state) => state);
+  const { month, setMonth } = useMonth((state) => state);
 
   const onSubmit = async (data) => {
     const result = await getDailyOrders(data);

@@ -6,10 +6,10 @@ const useCarOrder = create(
     (set) => ({
       total: 0,
       orders: [],
-      setOrders: (state) => {
-        set(() => ({
-          total: state.total,
-          orders: state.orders,
+      setOrders: () => {
+        set((params) => ({
+          total: params.total,
+          orders: params.orders,
         }));
       },
     }),

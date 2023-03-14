@@ -139,11 +139,9 @@ const OrderTable = ({ activeMonth, orderList }) => {
   const [orderBy, setOrderBy] = useState("id");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  // const [orders, setOrders] = useState([]);
   const [filteredOrderList, setFilteredOrderList] = useState([]);
 
-  const orders = useCarOrder((state) => state.orders);
-  const setOrders = useCarOrder((state) => state.setOrders);
+  const { orders, setOrders } = useCarOrder((state) => state);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
