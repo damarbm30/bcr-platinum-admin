@@ -103,21 +103,24 @@ const CarList = ({ active }) => {
   return (
     <div className="container-fluid p-0">
       <Wrapper>
-        {filteredCarList(carList)?.map((car) => {
-          const { id, image, name, price, category, updatedAt } = car;
-          return (
-            <CarItem
-              key={id}
-              id={id}
-              image={image}
-              name={name}
-              price={price}
-              category={category}
-              updatedAt={updatedAt}
-              onGetId={handleGetId}
-            />
-          );
-        })}
+        {filteredCarList(carList)
+          ?.slice(0)
+          .reverse()
+          .map((car) => {
+            const { id, image, name, price, category, updatedAt } = car;
+            return (
+              <CarItem
+                key={id}
+                id={id}
+                image={image}
+                name={name}
+                price={price}
+                category={category}
+                updatedAt={updatedAt}
+                onGetId={handleGetId}
+              />
+            );
+          })}
       </Wrapper>
       <DeleteModal carId={carId} onDelete={handleDelete} />
       <ToastContainer closeButton={false} />
