@@ -7,6 +7,8 @@ import { getDailyOrders } from "../../services/orderServices";
 import { InnerSidebar, Breadcrumb } from "../../components";
 import Chart from "./Chart";
 import OrderTable from "./OrderTable";
+import useOrder from "../../store/orderList";
+import useMonth from "../../store/month";
 
 const Container = styled.div`
   display: flex;
@@ -28,15 +30,20 @@ const MONTHS_LIST = [];
 
 const Dashboard = () => {
   const { register, handleSubmit } = useForm();
-  const [orderList, setOrderList] = useState([]);
-  const [month, setMonth] = useState(null);
+
+  const { orderList, setOrderList } = useOrder((state) => state);
+  const { month, setMonth } = useMonth((state) => state);
 
   const onSubmit = async (data) => {
     const result = await getDailyOrders(data);
-    setOrderList(result);
+    setOrderList({
+      orderList: result,
+      total: result?.length,
+    });
   };
 
   const activeMonth = moment(month?.split(",")[0]).format("MMMM");
+  console.log(activeMonth);
 
   moment.locale("en");
 
@@ -52,7 +59,7 @@ const Dashboard = () => {
       .format("YYYY-MM-DD");
 
     let monthObj = {
-      month: month,
+      monthValue: month,
       firstDate: startOfMonth,
       lastDate: endOfMonth,
     };
@@ -91,21 +98,26 @@ const Dashboard = () => {
                   {...register("date")}
                   className="w-100 border border-dark border-opacity-25 p-1"
                   style={{ height: "50px" }}
-                  onChange={(e) => setMonth(e.target.value)}
+                  onChange={(e) => setMonth({ month: e.target.value })}
                 >
                   <option value="" hidden>
                     Pilih Bulan
                   </option>
                   {MONTHS_LIST.map((item, index) => {
-                    const { month, firstDate, lastDate } = item;
+                    const { monthValue, firstDate, lastDate } = item;
 
                     return (
                       <option
                         key={index}
-                        name={month}
+                        name={monthValue}
                         value={`${firstDate}, ${lastDate}`}
+                        selected={
+                          monthValue.split(" ")[0] === activeMonth
+                            ? true
+                            : false
+                        }
                       >
-                        {month}
+                        {monthValue}
                       </option>
                     );
                   })}

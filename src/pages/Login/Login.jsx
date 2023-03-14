@@ -28,7 +28,8 @@ const Login = () => {
   } = useForm({ resolver: yupResolver(schema) });
 
   const onSubmit = (data) => {
-    adminLogin(data, setIsError, navigate);
+    adminLogin(data, setIsError);
+    navigate("/cars");
   };
 
   return (

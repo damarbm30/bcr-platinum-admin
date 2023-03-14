@@ -7,6 +7,7 @@ import { Breadcrumb, InnerSidebar } from "../../components";
 import { editCar } from "../../services/carServices";
 import useCar from "../../store/carList";
 import { upload } from "../../assets";
+import moment from "moment/moment";
 
 const Wrapper = styled.div`
   position: absolute;
@@ -35,7 +36,12 @@ const EditCar = () => {
   const carList = useCar((state) => state.carList);
   const current = carList.find((car) => car.id.toString() === id);
 
-  const { register, handleSubmit, watch } = useForm();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
 
   const onSubmit = async (data) => {
     const result = await editCar(data, id);
@@ -79,11 +85,14 @@ const EditCar = () => {
                 <input
                   type="text"
                   id="name"
-                  {...register("name")}
+                  {...register("name", { required: true })}
                   placeholder="Input Nama/Tipe Mobil"
                   className="col-4 border border-dark border-opacity-25 p-1 rounded"
                   defaultValue={current?.name}
                 />
+                {errors.name && (
+                  <span className="text-danger">This field is required</span>
+                )}
               </div>
               <div className="row align-items-center">
                 <label htmlFor="price" className="col-2">
@@ -92,11 +101,14 @@ const EditCar = () => {
                 <input
                   type="text"
                   id="price"
-                  {...register("price")}
+                  {...register("price", { required: true })}
                   placeholder="Input Harga Sewa Mobil"
                   className="col-4 border border-dark border-opacity-25 p-1 rounded"
                   defaultValue={current?.price}
                 />
+                {errors.price && (
+                  <span className="text-danger">This field is required</span>
+                )}
               </div>
               <div className="row align-items-center">
                 <label htmlFor="image" className="col-2">
@@ -116,11 +128,14 @@ const EditCar = () => {
                   <input
                     type="file"
                     id="image"
-                    {...register("image")}
+                    {...register("image", { required: true })}
                     className="d-none"
                   />
                   <img src={upload} alt="upload" />
                 </label>
+                {errors.image && (
+                  <span className="text-danger">This field is required</span>
+                )}
               </div>
               <div className="row align-items-center">
                 <label htmlFor="category" className="col-2">
@@ -128,7 +143,7 @@ const EditCar = () => {
                 </label>
                 <select
                   id="category"
-                  {...register("category")}
+                  {...register("category", { required: true })}
                   className="col-4 border border-dark border-opacity-25 p-1 rounded"
                   style={{ color: "gray" }}
                   defaultValue={current?.category}
@@ -140,14 +155,21 @@ const EditCar = () => {
                   <option value="medium">4 - 6 orang</option>
                   <option value="large">6 - 8 orang</option>
                 </select>
+                {errors.category && (
+                  <span className="text-danger">This field is required</span>
+                )}
               </div>
               <div className="row align-items-center">
-                <p className="col-2 ">Created at</p>
-                <span className="col-4">-</span>
+                <p className="col-2">Created at</p>
+                <span className="col-4 px-0">
+                  {moment(current?.createdAt).format("DD MMM YYYY, HH.mm")}
+                </span>
               </div>
               <div className="row align-items-center">
-                <p className="col-2 ">Updated at</p>
-                <span className="col-4">-</span>
+                <p className="col-2">Updated at</p>
+                <span className="col-4 px-0">
+                  {moment(current?.updatedAt).format("DD MMM YYYY, HH.mm")}
+                </span>
               </div>
             </div>
             <div

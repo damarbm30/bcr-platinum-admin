@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { logo, menu } from "../../assets";
-import useCar from "../../store/carList";
 import useSearch from "../../store/searchResult";
 
 const Navbar = ({ sidebarWidth }) => {
