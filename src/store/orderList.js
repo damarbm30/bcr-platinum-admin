@@ -6,8 +6,8 @@ const useOrder = create(
     (set) => ({
       total: 0,
       orderList: [],
-      setOrderList: () => {
-        set((params) => ({
+      setOrderList: (params) => {
+        set(() => ({
           total: params.total,
           orderList: params.orderList,
         }));

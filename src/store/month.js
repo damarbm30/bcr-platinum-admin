@@ -5,8 +5,8 @@ const useMonth = create(
   persist(
     (set) => ({
       month: null,
-      setMonth: () => {
-        set((params) => ({
+      setMonth: (params) => {
+        set(() => ({
           month: params.month,
         }));
       },

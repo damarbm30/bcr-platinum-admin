@@ -6,14 +6,14 @@ const useCar = create(
     (set) => ({
       total: 0,
       carList: [],
-      setCarList: () => {
-        set((params) => ({
+      setCarList: (params) => {
+        set(() => ({
           carList: params.carList,
           total: params.total,
         }));
       },
-      deleteCarList: () => {
-        set((params) => ({
+      deleteCarList: (params) => {
+        set(() => ({
           carList: params.carList.filter((item) => item.id !== params.id),
         }));
       },

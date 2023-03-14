@@ -5,8 +5,8 @@ const useSearch = create(
   persist(
     (set) => ({
       searchResult: "",
-      setSearchResult: () => {
-        set((params) => ({
+      setSearchResult: (params) => {
+        set(() => ({
           searchResult: params.searchResult,
         }));
       },
