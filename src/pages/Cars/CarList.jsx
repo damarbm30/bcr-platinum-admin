@@ -52,7 +52,7 @@ const CarList = ({ active }) => {
   }
 
   const filteredCarList = (cars) => {
-    return cars.filter((car) => {
+    return cars?.filter((car) => {
       if (active !== "All") {
         return (
           car?.name?.toLowerCase().includes(searchResult?.toLowerCase()) &&
@@ -69,10 +69,13 @@ const CarList = ({ active }) => {
       setIsLoading(true);
       const result = await getCars();
       setIsLoading(false);
-      setCarList({
-        carList: result,
-        total: result?.length,
-      });
+
+      if (result) {
+        setCarList({
+          carList: result,
+          total: result?.length,
+        });
+      }
     }
 
     getCarsAsync();
@@ -105,24 +108,25 @@ const CarList = ({ active }) => {
     <div className="container-fluid p-0">
       {!isLoading ? (
         <Wrapper>
-          {filteredCarList(carList)
-            ?.slice(0)
-            .reverse()
-            .map((car) => {
-              const { id, image, name, price, category, updatedAt } = car;
-              return (
-                <CarItem
-                  key={id}
-                  id={id}
-                  image={image}
-                  name={name}
-                  price={price}
-                  category={category}
-                  updatedAt={updatedAt}
-                  onGetId={handleGetId}
-                />
-              );
-            })}
+          {carList.length > 0 &&
+            filteredCarList(carList)
+              ?.slice(0)
+              .reverse()
+              .map((car) => {
+                const { id, image, name, price, category, updatedAt } = car;
+                return (
+                  <CarItem
+                    key={id}
+                    id={id}
+                    image={image}
+                    name={name}
+                    price={price}
+                    category={category}
+                    updatedAt={updatedAt}
+                    onGetId={handleGetId}
+                  />
+                );
+              })}
         </Wrapper>
       ) : (
         <div

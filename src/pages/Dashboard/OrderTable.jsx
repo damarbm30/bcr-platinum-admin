@@ -164,10 +164,13 @@ const OrderTable = ({ activeMonth, orderList }) => {
   useEffect(() => {
     async function getOrdersAsync() {
       const result = await getOrders();
-      setOrders({
-        orders: result,
-        total: result?.length,
-      });
+
+      if (result) {
+        setOrders({
+          orders: result,
+          total: result?.length,
+        });
+      }
     }
 
     getOrdersAsync();
@@ -190,7 +193,7 @@ const OrderTable = ({ activeMonth, orderList }) => {
           order={order}
           orderBy={orderBy}
           onRequestSort={handleRequestSort}
-          rowCount={orders.length}
+          rowCount={orders?.length}
         />
         <TableBody>
           {stableSort(filteredOrderList, getComparator(order, orderBy))

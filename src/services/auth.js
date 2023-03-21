@@ -6,6 +6,8 @@ export const adminLogin = async (data, setIsError) => {
     const accessToken = JSON.stringify(result.data.access_token);
     localStorage.setItem("adminCredential", accessToken);
     setIsError(false);
+
+    return result;
   } catch (error) {
     console.log(error);
     setIsError(true);
