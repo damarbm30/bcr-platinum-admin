@@ -1,10 +1,14 @@
 import { Link } from "react-router-dom";
+import { Skeleton } from "@mui/material";
 import moment from "moment/moment";
 import "moment/locale/id";
+import { useState } from "react";
 
 import { clock, edit, people, trash } from "../../assets";
 
 const CarItem = ({ id, image, name, price, category, updatedAt, onGetId }) => {
+  const [isLoading, setIsLoading] = useState(true);
+
   const formatter = new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -28,21 +32,29 @@ const CarItem = ({ id, image, name, price, category, updatedAt, onGetId }) => {
 
   moment.locale("id");
 
+  console.log("loading: ", isLoading);
+
   return (
     <div className="card w-100">
       <div className="card-body">
         <div className="d-flex px-3 py-2 justify-content-center mb-4">
+          {isLoading && (
+            <Skeleton
+              duration={2}
+              height={160}
+              width={270}
+              className="skeleton"
+            />
+          )}
           <img
             src={image}
             alt={name}
-            width={270}
-            h={160}
+            width={!isLoading ? 270 : 0}
             style={{
               borderRadius: "4px",
               objectFit: "fill",
-              width: "270px",
-              height: "160px",
             }}
+            onLoad={() => setIsLoading(false)}
           />
         </div>
         <div className="d-flex flex-column gap-2 mb-4">
