@@ -1,3 +1,4 @@
+import { debounce } from "lodash";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -9,11 +10,11 @@ const Navbar = ({ sidebarWidth }) => {
 
   const setSearchResult = useSearch((state) => state.setSearchResult);
 
-  const onSearch = () => {
+  const onSearch = debounce(() => {
     setSearchResult({
       searchResult: searchValue,
     });
-  };
+  }, 1000);
 
   const navigate = useNavigate();
 

@@ -5,5 +5,6 @@ export default axios.create({
   headers: {
     accept: "application/json",
     access_token: JSON.parse(localStorage.getItem("adminCredential")),
+    "Cache-Control": "max-age=86400",
   },
 });
