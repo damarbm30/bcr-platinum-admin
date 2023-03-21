@@ -3,7 +3,6 @@ import api from "./config";
 export const getCars = async () => {
   try {
     const result = await api.get(`/admin/v2/car?pageSize=50`);
-
     return result?.data?.cars;
   } catch (error) {
     console.log(error.message);

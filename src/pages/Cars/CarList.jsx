@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
+import { CircularProgress } from "@mui/material";
 import styled from "styled-components";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -30,10 +31,9 @@ const Wrapper = styled.div`
 
 const CarList = ({ active }) => {
   const [carId, setCarId] = useState(null);
-  const [isSuccessDelete, setIsSuccessDelete] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const carList = useCar((state) => state.carList);
-  const setCarList = useCar((state) => state.setCarList);
+  const { carList, setCarList, deleteCarList } = useCar((state) => state);
 
   const searchResult = useSearch((state) => state.searchResult);
 
@@ -52,7 +52,7 @@ const CarList = ({ active }) => {
   }
 
   const filteredCarList = (cars) => {
-    return cars.filter((car) => {
+    return cars?.filter((car) => {
       if (active !== "All") {
         return (
           car?.name?.toLowerCase().includes(searchResult?.toLowerCase()) &&
@@ -66,22 +66,26 @@ const CarList = ({ active }) => {
 
   useEffect(() => {
     async function getCarsAsync() {
+      setIsLoading(true);
       const result = await getCars();
-      setCarList({
-        carList: result,
-        total: result?.length,
-      });
+      setIsLoading(false);
+
+      if (result) {
+        setCarList({
+          carList: result,
+          total: result?.length,
+        });
+      }
     }
 
     getCarsAsync();
-  }, [isSuccessDelete]);
+  }, []);
 
   const handleDelete = async (carId) => {
-    setIsSuccessDelete(false);
     const result = await deleteCar(carId);
 
     if (result.status === 200) {
-      setIsSuccessDelete(true);
+      deleteCarList({ id: carId });
       toast("Data Berhasil Dihapus", {
         position: "top-center",
         autoClose: 3000,
@@ -102,23 +106,37 @@ const CarList = ({ active }) => {
 
   return (
     <div className="container-fluid p-0">
-      <Wrapper>
-        {filteredCarList(carList)?.map((car) => {
-          const { id, image, name, price, category, updatedAt } = car;
-          return (
-            <CarItem
-              key={id}
-              id={id}
-              image={image}
-              name={name}
-              price={price}
-              category={category}
-              updatedAt={updatedAt}
-              onGetId={handleGetId}
-            />
-          );
-        })}
-      </Wrapper>
+      {!isLoading ? (
+        <Wrapper>
+          {carList.length > 0 &&
+            filteredCarList(carList)
+              ?.slice(0)
+              .reverse()
+              .map((car) => {
+                const { id, image, name, price, category, updatedAt } = car;
+                return (
+                  <CarItem
+                    key={id}
+                    id={id}
+                    image={image}
+                    name={name}
+                    price={price}
+                    category={category}
+                    updatedAt={updatedAt}
+                    onGetId={handleGetId}
+                  />
+                );
+              })}
+        </Wrapper>
+      ) : (
+        <div
+          className="d-flex w-100 align-items-center justify-content-center"
+          style={{ paddingTop: "5em" }}
+        >
+          <CircularProgress size={250} style={{ color: "#0d28a6" }} />
+        </div>
+      )}
+
       <DeleteModal carId={carId} onDelete={handleDelete} />
       <ToastContainer closeButton={false} />
     </div>

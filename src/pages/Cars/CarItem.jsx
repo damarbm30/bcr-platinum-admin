@@ -46,17 +46,15 @@ const CarItem = ({ id, image, name, price, category, updatedAt, onGetId }) => {
           />
         </div>
         <div className="d-flex flex-column gap-2 mb-4">
-          <p className="">{name}</p>
-          <p className=" fw-bold">{formattedPrice} / hari</p>
+          <p>{name}</p>
+          <p className="fw-bold">{formattedPrice} / hari</p>
           <div className="d-flex gap-2">
             <img src={people} alt="people" />
-            <p className="">{peopleCap}</p>
+            <p>{peopleCap}</p>
           </div>
           <div className="d-flex gap-2">
             <img src={clock} alt="clock" />
-            <p className="">
-              Updated at {moment(updatedAt).format("D MMM YYYY, HH.mm")}
-            </p>
+            <p>Updated at {moment(updatedAt).format("DD MMM YYYY, HH.mm")}</p>
           </div>
         </div>
         <div className="d-flex gap-3">
@@ -67,7 +65,7 @@ const CarItem = ({ id, image, name, price, category, updatedAt, onGetId }) => {
             onClick={() => onGetId(id)}
           >
             <img src={trash} alt="trash" />
-            <p className="">Delete</p>
+            <p>Delete</p>
           </button>
           <Link to={`/edit-car/${id}`} className="w-100">
             <button className="btn btn-success w-100 d-flex justify-content-center align-items-center gap-2">

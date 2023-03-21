@@ -16,6 +16,7 @@ import { TableFooter } from "@mui/material";
 import OrderData from "./OrderData";
 import { getOrders } from "../../services/orderServices";
 import moment from "moment/moment";
+import useCarOrder from "../../store/carOrderList";
 
 function descendingComparator(a, b, orderBy) {
   if (orderBy === "User") {
@@ -138,8 +139,9 @@ const OrderTable = ({ activeMonth, orderList }) => {
   const [orderBy, setOrderBy] = useState("id");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [orders, setOrders] = useState([]);
-  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [filteredOrderList, setFilteredOrderList] = useState([]);
+
+  const { orders, setOrders } = useCarOrder((state) => state);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -162,7 +164,13 @@ const OrderTable = ({ activeMonth, orderList }) => {
   useEffect(() => {
     async function getOrdersAsync() {
       const result = await getOrders();
-      setOrders(result);
+
+      if (result) {
+        setOrders({
+          orders: result,
+          total: result?.length,
+        });
+      }
     }
 
     getOrdersAsync();
@@ -174,7 +182,8 @@ const OrderTable = ({ activeMonth, orderList }) => {
 
       return moment(start_rent_at).format("MMMM") === activeMonth;
     });
-    setFilteredOrders(filtered);
+
+    setFilteredOrderList(filtered);
   }, [orderList]);
 
   return (
@@ -184,10 +193,10 @@ const OrderTable = ({ activeMonth, orderList }) => {
           order={order}
           orderBy={orderBy}
           onRequestSort={handleRequestSort}
-          rowCount={orders.length}
+          rowCount={orders?.length}
         />
         <TableBody>
-          {stableSort(filteredOrders, getComparator(order, orderBy))
+          {stableSort(filteredOrderList, getComparator(order, orderBy))
             ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             ?.map((item) => {
               const {

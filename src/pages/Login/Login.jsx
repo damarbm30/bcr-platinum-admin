@@ -27,8 +27,11 @@ const Login = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const onSubmit = (data) => {
-    adminLogin(data, setIsError, navigate);
+  const onSubmit = async (data) => {
+    const result = await adminLogin(data, setIsError);
+    if (result) {
+      navigate("/cars");
+    }
   };
 
   return (
