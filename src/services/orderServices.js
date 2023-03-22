@@ -7,7 +7,12 @@ export const getDailyOrders = async (data) => {
     const lastDate = date[1].trim();
 
     const result = await api.get(
-      `/admin/order/reports?from=${firstDate}&until=${lastDate}`
+      `/admin/order/reports?from=${firstDate}&until=${lastDate}`,
+      {
+        headers: {
+          access_token: JSON.parse(localStorage.getItem("adminCredential")),
+        },
+      }
     );
 
     return result?.data;
@@ -19,7 +24,12 @@ export const getDailyOrders = async (data) => {
 export const getOrders = async () => {
   try {
     const result = await api.get(
-      "/admin/v2/order?sort=created_at%3Aasc&page=1&pageSize=1000"
+      "/admin/v2/order?sort=created_at%3Aasc&page=1&pageSize=1000",
+      {
+        headers: {
+          access_token: JSON.parse(localStorage.getItem("adminCredential")),
+        },
+      }
     );
 
     return result?.data?.orders;
