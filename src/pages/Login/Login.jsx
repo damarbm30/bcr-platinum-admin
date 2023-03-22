@@ -30,7 +30,7 @@ const Login = () => {
   const onSubmit = async (data) => {
     const result = await adminLogin(data, setIsError);
     if (result) {
-      navigate("/cars");
+      navigate("/dashboard");
     }
   };
 

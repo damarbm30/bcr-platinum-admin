@@ -43,7 +43,6 @@ const Dashboard = () => {
   };
 
   const activeMonth = moment(month?.split(",")[0]).format("MMMM");
-  console.log(activeMonth);
 
   moment.locale("en");
 

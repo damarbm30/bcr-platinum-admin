@@ -4,7 +4,7 @@ const Container = styled.div`
   position: fixed;
   left: 70px;
   height: 100vh;
-  width: 220px;
+  width: 210px;
 `;
 
 const Wrapper = styled.div`

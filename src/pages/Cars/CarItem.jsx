@@ -32,8 +32,6 @@ const CarItem = ({ id, image, name, price, category, updatedAt, onGetId }) => {
 
   moment.locale("id");
 
-  console.log("loading: ", isLoading);
-
   return (
     <div className="card w-100">
       <div className="card-body">
@@ -50,6 +48,7 @@ const CarItem = ({ id, image, name, price, category, updatedAt, onGetId }) => {
             src={image}
             alt={name}
             width={!isLoading ? 270 : 0}
+            height={160}
             style={{
               borderRadius: "4px",
               objectFit: "fill",

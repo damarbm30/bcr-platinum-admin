@@ -32,6 +32,7 @@ const Wrapper = styled.div`
 const CarList = ({ active }) => {
   const [carId, setCarId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
 
   const { carList, setCarList, deleteCarList } = useCar((state) => state);
 
@@ -79,13 +80,13 @@ const CarList = ({ active }) => {
     }
 
     getCarsAsync();
-  }, []);
+  }, [isDeleted]);
 
   const handleDelete = async (carId) => {
     const result = await deleteCar(carId);
-
-    if (result.status === 200) {
-      deleteCarList({ id: carId });
+    setIsDeleted(true);
+    if (result.status == 200) {
+      console.log("Line 92");
       toast("Data Berhasil Dihapus", {
         position: "top-center",
         autoClose: 3000,
@@ -97,7 +98,9 @@ const CarList = ({ active }) => {
         theme: "dark",
         className: "text-center",
       });
+      deleteCarList({ id: carId });
     }
+    setIsDeleted(false);
   };
 
   const handleGetId = (id) => {
@@ -136,7 +139,6 @@ const CarList = ({ active }) => {
           <CircularProgress size={250} style={{ color: "#0d28a6" }} />
         </div>
       )}
-
       <DeleteModal carId={carId} onDelete={handleDelete} />
       <ToastContainer closeButton={false} />
     </div>
