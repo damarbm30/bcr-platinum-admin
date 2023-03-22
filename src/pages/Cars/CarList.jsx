@@ -9,6 +9,7 @@ import useCar from "../../store/carList";
 import CarItem from "./CarItem";
 import DeleteModal from "./DeleteModal";
 import useSearch from "../../store/searchResult";
+import useAxios from "../../hooks/useAxios";
 
 const Wrapper = styled.div`
   display: grid;
@@ -31,10 +32,11 @@ const Wrapper = styled.div`
 
 const CarList = ({ active }) => {
   const [carId, setCarId] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
 
   const { carList, setCarList, deleteCarList } = useCar((state) => state);
+  // console.log(carList);
 
   const searchResult = useSearch((state) => state.searchResult);
 
@@ -65,28 +67,49 @@ const CarList = ({ active }) => {
     });
   };
 
+  // useEffect(() => {
+  //   async function getCarsAsync() {
+  //     setIsLoading(true);
+  //     const result = await getCars();
+  //     setIsLoading(false);
+
+  //     if (result) {
+  //       setCarList({
+  //         carList: result,
+  //         total: result?.length,
+  //       });
+  //     }
+  //   }
+
+  //   getCarsAsync();
+  // }, [isDeleted]);
+
+  const { response, isLoading, error } = useAxios({
+    method: "GET",
+    url: "/admin/v2/car?pageSize=50",
+    headers: {
+      accept: "application/json",
+      access_token: JSON.parse(localStorage.getItem("adminCredential")),
+    },
+  });
+
   useEffect(() => {
-    async function getCarsAsync() {
-      setIsLoading(true);
-      const result = await getCars();
-      setIsLoading(false);
+    if (!isLoading) {
+      console.log("Line 97 triggered");
 
-      if (result) {
-        setCarList({
-          carList: result,
-          total: result?.length,
-        });
-      }
+      setCarList({
+        carList: response.cars,
+        total: response?.cars?.length,
+      });
     }
+  }, [isLoading]);
 
-    getCarsAsync();
-  }, [isDeleted]);
+  console.log("CARLIST RERENDER");
 
   const handleDelete = async (carId) => {
     const result = await deleteCar(carId);
-    setIsDeleted(true);
     if (result.status == 200) {
-      console.log("Line 92");
+      deleteCarList({ id: carId });
       toast("Data Berhasil Dihapus", {
         position: "top-center",
         autoClose: 3000,
@@ -98,9 +121,7 @@ const CarList = ({ active }) => {
         theme: "dark",
         className: "text-center",
       });
-      deleteCarList({ id: carId });
     }
-    setIsDeleted(false);
   };
 
   const handleGetId = (id) => {
@@ -111,7 +132,7 @@ const CarList = ({ active }) => {
     <div className="container-fluid p-0">
       {!isLoading ? (
         <Wrapper>
-          {carList.length > 0 &&
+          {carList?.length > 0 &&
             filteredCarList(carList)
               ?.slice(0)
               .reverse()

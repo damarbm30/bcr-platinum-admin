@@ -13,8 +13,8 @@ const useCar = create(
         }));
       },
       deleteCarList: (params) => {
-        set(() => ({
-          carList: params.carList.filter((item) => item.id !== params.id),
+        set((state) => ({
+          carList: state.carList.filter((item) => item.id !== params.id),
         }));
       },
     }),
