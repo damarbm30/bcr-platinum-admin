@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
-export const useAxios = (axiosParams) => {
+const useApiSubmit = (axiosParams) => {
   const [response, setResponse] = useState(undefined);
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = async (params) => {
     try {
@@ -19,11 +19,16 @@ export const useAxios = (axiosParams) => {
     }
   };
 
-  useEffect(() => {
-    fetchData(axiosParams);
-  }, []);
+  const doSubmit = async (data) => {
+    setIsLoading(true);
+    setError(null);
 
-  return { response, error, isLoading };
+    axiosParams = { ...axiosParams, data: data };
+
+    await fetchData(axiosParams);
+  };
+
+  return { response, error, isLoading, doSubmit };
 };
 
-export default useAxios;
+export default useApiSubmit;

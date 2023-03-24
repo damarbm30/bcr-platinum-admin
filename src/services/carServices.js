@@ -1,17 +1,17 @@
 import api from "./config";
 
-export const getCars = async () => {
-  try {
-    const result = await api.get(`/admin/v2/car?pageSize=50`, {
-      headers: {
-        access_token: JSON.parse(localStorage.getItem("adminCredential")),
-      },
-    });
-    return result?.data?.cars;
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+// export const getCars = async () => {
+//   try {
+//     const result = await api.get(`/admin/v2/car?pageSize=50`, {
+//       headers: {
+//         access_token: JSON.parse(localStorage.getItem("adminCredential")),
+//       },
+//     });
+//     return result?.data?.cars;
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// };
 
 export const createCar = async (data) => {
   try {

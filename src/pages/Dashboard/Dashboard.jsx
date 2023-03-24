@@ -16,6 +16,11 @@ const Container = styled.div`
   position: relative;
   left: 280px;
   width: calc(100% - 280px);
+
+  @media (max-width: 768px) {
+    width: calc(100% - 70px);
+    left: 70px;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -27,6 +32,8 @@ const Wrapper = styled.div`
 `;
 
 const MONTHS_LIST = [];
+
+moment.locale("en");
 
 const Dashboard = () => {
   const { register, handleSubmit } = useForm();
@@ -42,12 +49,10 @@ const Dashboard = () => {
     });
   };
 
-  const activeMonth = moment(month?.split(",")[0]).format("MMMM");
-
-  moment.locale("en");
+  const activeMonth = moment(month?.split(",")[0]).format("MMMM YYYY");
 
   for (let i = 0; i < 12; i++) {
-    const month = moment().subtract(i, "month").format("MMMM - YYYY");
+    const month = moment().subtract(i, "month").format("MMMM YYYY");
     const startOfMonth = moment()
       .subtract(i, "month")
       .startOf("month")
@@ -91,13 +96,14 @@ const Dashboard = () => {
               <p className="mb-2">Month</p>
               <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="d-flex col-2 align-items-center"
+                className="d-flex align-items-center"
               >
                 <select
                   {...register("date")}
-                  className="w-100 border border-dark border-opacity-25 p-1"
+                  className="w-25 border border-dark border-opacity-25 p-1"
                   style={{ height: "50px" }}
                   onChange={(e) => setMonth({ month: e.target.value })}
+                  // selected={activeMonth}
                 >
                   <option value="" hidden>
                     Pilih Bulan
@@ -110,11 +116,7 @@ const Dashboard = () => {
                         key={index}
                         name={monthValue}
                         value={`${firstDate}, ${lastDate}`}
-                        selected={
-                          monthValue.split(" ")[0] === activeMonth
-                            ? true
-                            : false
-                        }
+                        selected={monthValue === activeMonth ? true : false}
                       >
                         {monthValue}
                       </option>

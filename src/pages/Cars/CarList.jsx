@@ -4,12 +4,13 @@ import { CircularProgress } from "@mui/material";
 import styled from "styled-components";
 
 import "react-toastify/dist/ReactToastify.css";
-import { getCars, deleteCar } from "../../services/carServices";
+import { deleteCar } from "../../services/carServices";
 import useCar from "../../store/carList";
 import CarItem from "./CarItem";
 import DeleteModal from "./DeleteModal";
 import useSearch from "../../store/searchResult";
-import useAxios from "../../hooks/useAxios";
+import useApi from "../../hooks/useApi";
+import { getFormattedCapacity } from "../../utils";
 
 const Wrapper = styled.div`
   display: grid;
@@ -32,27 +33,12 @@ const Wrapper = styled.div`
 
 const CarList = ({ active }) => {
   const [carId, setCarId] = useState(null);
-  // const [isLoading, setIsLoading] = useState(false);
-  const [isDeleted, setIsDeleted] = useState(false);
 
   const { carList, setCarList, deleteCarList } = useCar((state) => state);
-  // console.log(carList);
 
   const searchResult = useSearch((state) => state.searchResult);
 
-  let peopleCap;
-
-  switch (active.toLowerCase()) {
-    case "2 - 4 people":
-      peopleCap = "small";
-      break;
-    case "4 - 6 people":
-      peopleCap = "medium";
-      break;
-    case "6 - 8 people":
-      peopleCap = "large";
-      break;
-  }
+  const peopleCap = getFormattedCapacity(active);
 
   const filteredCarList = (cars) => {
     return cars?.filter((car) => {
@@ -84,7 +70,7 @@ const CarList = ({ active }) => {
   //   getCarsAsync();
   // }, [isDeleted]);
 
-  const { response, isLoading, error } = useAxios({
+  const { response, isLoading } = useApi({
     method: "GET",
     url: "/admin/v2/car?pageSize=50",
     headers: {
@@ -95,16 +81,12 @@ const CarList = ({ active }) => {
 
   useEffect(() => {
     if (!isLoading) {
-      console.log("Line 97 triggered");
-
       setCarList({
         carList: response.cars,
         total: response?.cars?.length,
       });
     }
   }, [isLoading]);
-
-  console.log("CARLIST RERENDER");
 
   const handleDelete = async (carId) => {
     const result = await deleteCar(carId);
@@ -132,7 +114,7 @@ const CarList = ({ active }) => {
     <div className="container-fluid p-0">
       {!isLoading ? (
         <Wrapper>
-          {carList?.length > 0 &&
+          {carList?.length > 0 && filteredCarList(carList).length > 0 ? (
             filteredCarList(carList)
               ?.slice(0)
               .reverse()
@@ -150,7 +132,10 @@ const CarList = ({ active }) => {
                     onGetId={handleGetId}
                   />
                 );
-              })}
+              })
+          ) : (
+            <p>Tidak ada mobil yang dapat ditampilkan</p>
+          )}
         </Wrapper>
       ) : (
         <div

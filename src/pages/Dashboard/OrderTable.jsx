@@ -13,10 +13,12 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
 import { TableFooter } from "@mui/material";
+
 import OrderData from "./OrderData";
 import { getOrders } from "../../services/orderServices";
 import moment from "moment/moment";
 import useCarOrder from "../../store/carOrderList";
+import useApi from "../../hooks/useApi";
 
 function descendingComparator(a, b, orderBy) {
   if (orderBy === "User") {
@@ -159,28 +161,48 @@ const OrderTable = ({ activeMonth, orderList }) => {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - orders.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - orders?.length) : 0;
+
+  // useEffect(() => {
+  //   async function getOrdersAsync() {
+  //     const result = await getOrders();
+
+  //     console.log(result);
+
+  //     if (result) {
+  //       setOrders({
+  //         orders: result,
+  //         total: result?.length,
+  //       });
+  //     }
+  //   }
+
+  //   getOrdersAsync();
+  // }, []);
+
+  const { response, isLoading } = useApi({
+    method: "GET",
+    url: "/admin/v2/order?sort=created_at%3Aasc&page=1&pageSize=1000",
+    headers: {
+      accept: "application/json",
+      access_token: JSON.parse(localStorage.getItem("adminCredential")),
+    },
+  });
 
   useEffect(() => {
-    async function getOrdersAsync() {
-      const result = await getOrders();
-
-      if (result) {
-        setOrders({
-          orders: result,
-          total: result?.length,
-        });
-      }
+    if (!isLoading) {
+      setOrders({
+        orders: response?.orders,
+        total: response?.orders?.length,
+      });
     }
-
-    getOrdersAsync();
-  }, []);
+  }, [isLoading]);
 
   useEffect(() => {
-    const filtered = orders.filter((item) => {
+    const filtered = orders?.filter((item) => {
       const { start_rent_at } = item || {};
 
-      return moment(start_rent_at).format("MMMM") === activeMonth;
+      return moment(start_rent_at).format("MMMM YYYY") === activeMonth;
     });
 
     setFilteredOrderList(filtered);
@@ -236,7 +258,7 @@ const OrderTable = ({ activeMonth, orderList }) => {
           <TableRow>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-              count={orders.length}
+              count={orders?.length}
               rowsPerPage={rowsPerPage}
               colSpan={8}
               page={page}

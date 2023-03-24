@@ -9,12 +9,30 @@ import useCar from "../../store/carList";
 import { upload } from "../../assets";
 import moment from "moment/moment";
 
+const Container = styled.div`
+  display: flex;
+  min-height: 100%;
+  position: relative;
+  left: 280px;
+  width: calc(100% - 280px);
+
+  @media (max-width: 768px) {
+    width: calc(100% - 70px);
+    left: 70px;
+  }
+`;
+
 const Wrapper = styled.div`
   position: absolute;
   width: 100%;
   min-height: calc(100vh - 54px);
   top: 54px;
   background-color: var(--background);
+
+  @media (max-width: 768px) {
+    top: 20px;
+    min-height: calc(100vh - 20px);
+  }
 `;
 
 const SaveButton = styled.button`
@@ -63,14 +81,7 @@ const EditCar = () => {
   };
 
   return (
-    <section
-      className="d-flex min-h-100"
-      style={{
-        position: "relative",
-        left: "280px",
-        width: "calc(100% - 280px)",
-      }}
-    >
+    <Container>
       <InnerSidebar />
       <Wrapper>
         <div className="d-flex flex-column p-4 gap-4">
@@ -79,7 +90,7 @@ const EditCar = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="d-flex flex-column gap-3 bg-white p-4">
               <div className="row align-items-center">
-                <label htmlFor="name" className="col-2">
+                <label htmlFor="name" className="w-25">
                   Nama/Tipe Mobil
                 </label>
                 <input
@@ -87,15 +98,15 @@ const EditCar = () => {
                   id="name"
                   {...register("name", { required: true })}
                   placeholder="Input Nama/Tipe Mobil"
-                  className="col-4 border border-dark border-opacity-25 p-1 rounded"
-                  defaultValue={current?.name}
+                  className="w-50 border border-dark border-opacity-25 p-1 rounded"
+                  defaultValue={current ? current?.name : ""}
                 />
                 {errors.name && (
                   <span className="text-danger">This field is required</span>
                 )}
               </div>
               <div className="row align-items-center">
-                <label htmlFor="price" className="col-2">
+                <label htmlFor="price" className="w-25">
                   Harga
                 </label>
                 <input
@@ -103,20 +114,20 @@ const EditCar = () => {
                   id="price"
                   {...register("price", { required: true })}
                   placeholder="Input Harga Sewa Mobil"
-                  className="col-4 border border-dark border-opacity-25 p-1 rounded"
-                  defaultValue={current?.price}
+                  className="w-50 border border-dark border-opacity-25 p-1 rounded"
+                  defaultValue={current ? current?.price : ""}
                 />
                 {errors.price && (
                   <span className="text-danger">This field is required</span>
                 )}
               </div>
               <div className="row align-items-center">
-                <label htmlFor="image" className="col-2">
+                <label htmlFor="image" className="w-25">
                   Foto
                 </label>
                 <label
                   htmlFor="image"
-                  className="d-flex justify-content-between col-4 border border-dark border-opacity-25 p-2 rounded"
+                  className="d-flex justify-content-between w-50 border border-dark border-opacity-25 p-2 rounded"
                 >
                   {!watch("image") || watch("image").length === 0 ? (
                     <p className="text-muted">Upload Foto Mobil</p>
@@ -138,15 +149,15 @@ const EditCar = () => {
                 )}
               </div>
               <div className="row align-items-center">
-                <label htmlFor="category" className="col-2">
+                <label htmlFor="category" className="w-25">
                   Kategori
                 </label>
                 <select
                   id="category"
                   {...register("category", { required: true })}
-                  className="col-4 border border-dark border-opacity-25 p-1 rounded"
+                  className="w-50 border border-dark border-opacity-25 p-1 rounded"
                   style={{ color: "gray" }}
-                  defaultValue={current?.category}
+                  defaultValue={current ? current?.category : ""}
                 >
                   <option value="" hidden>
                     Pilih Kategori Mobil
@@ -160,14 +171,14 @@ const EditCar = () => {
                 )}
               </div>
               <div className="row align-items-center">
-                <p className="col-2">Created at</p>
-                <span className="col-4 px-0">
+                <p className="w-25">Created at</p>
+                <span className="w-50 px-0">
                   {moment(current?.createdAt).format("DD MMM YYYY, HH.mm")}
                 </span>
               </div>
               <div className="row align-items-center">
-                <p className="col-2">Updated at</p>
-                <span className="col-4 px-0">
+                <p className="w-25">Updated at</p>
+                <span className="w-50 px-0">
                   {moment(current?.updatedAt).format("DD MMM YYYY, HH.mm")}
                 </span>
               </div>
@@ -191,7 +202,7 @@ const EditCar = () => {
           </form>
         </div>
       </Wrapper>
-    </section>
+    </Container>
   );
 };
 export default EditCar;
