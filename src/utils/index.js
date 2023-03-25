@@ -1,4 +1,4 @@
 import getFormattedPrice from "./getFormattedPrice";
-import getFormattedCapacity from "./getFormattedCapacity";
+import getCategory from "./getCategory";
 
-export { getFormattedPrice, getFormattedCapacity };
+export { getFormattedPrice, getCategory };

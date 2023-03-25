@@ -1,5 +1,5 @@
-const getFormattedCapacity = (category) => {
-  let peopleCap;
+const getCategory = (category) => {
+  let peopleCap = "";
 
   switch (category?.toLowerCase()) {
     case "small":
@@ -16,4 +16,4 @@ const getFormattedCapacity = (category) => {
   return peopleCap;
 };
 
-export default getFormattedCapacity;
+export default getCategory;
