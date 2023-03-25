@@ -2,13 +2,10 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useState } from "react";
 
-import { Breadcrumb, InnerSidebar } from "../../components";
-import { createCar } from "../../services/carServices";
-import { upload } from "../../assets";
-import useAxios from "../../hooks/useApi";
-import useApiSubmit from "../../hooks/useApiSubmit";
+import { Breadcrumb, InnerSidebar } from "~/components";
+import { upload } from "~/assets";
+import useApiSubmit from "~/hooks/useApiSubmit";
 
 const Container = styled.div`
   display: flex;
@@ -49,7 +46,7 @@ const CancelButton = styled.button`
 `;
 
 const NewCar = () => {
-  const { response, isLoading, doSubmit } = useApiSubmit({
+  const { isLoading, doSubmit } = useApiSubmit({
     method: "POST",
     url: "/admin/car",
     headers: {
@@ -57,14 +54,12 @@ const NewCar = () => {
       access_token: JSON.parse(localStorage.getItem("adminCredential")),
     },
   });
-
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
-
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
@@ -95,59 +90,6 @@ const NewCar = () => {
       });
     }
   };
-
-  // const onSubmit = async (data) => {
-  //   const result = await createCar({ ...data, status: false });
-
-  //   if (result.status === 201) {
-  //     navigate("/cars");
-  //     toast("Data Berhasil Disimpan", {
-  //       position: "top-center",
-  //       autoClose: 3000,
-  //       hideProgressBar: true,
-  //       closeOnClick: false,
-  //       pauseOnHover: false,
-  //       draggable: false,
-  //       progress: undefined,
-  //       theme: "light",
-  //       className: "text-center bg-success text-white",
-  //     });
-  //   }
-  // };
-
-  // console.log("IS SUBMIT: ", isSubmit);
-
-  // const { response, isLoading } = useAxios(
-  //   {
-  //     method: "POST",
-  //     url: "/admin/car",
-  //     headers: {
-  //       accept: "application/json",
-  //       access_token: JSON.parse(localStorage.getItem("adminCredential")),
-  //     },
-  //     body: formData,
-  //   },
-  //   isSubmit
-  // );
-
-  // console.log(response);
-  // console.log(isLoading);
-
-  // if (isSubmit && !isLoading) {
-  //   navigate("/cars");
-  //   toast("Data Berhasil Disimpan", {
-  //     position: "top-center",
-  //     autoClose: 3000,
-  //     hideProgressBar: true,
-  //     closeOnClick: false,
-  //     pauseOnHover: false,
-  //     draggable: false,
-  //     progress: undefined,
-  //     theme: "light",
-  //     className: "text-center bg-success text-white",
-  //   });
-  // }
-  // }
 
   return (
     <Container>

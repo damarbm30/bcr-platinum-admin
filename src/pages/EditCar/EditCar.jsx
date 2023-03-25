@@ -2,12 +2,12 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import styled from "styled-components";
-
-import { Breadcrumb, InnerSidebar } from "../../components";
-import { editCar } from "../../services/carServices";
-import useCar from "../../store/carList";
-import { upload } from "../../assets";
 import moment from "moment/moment";
+
+import { Breadcrumb, InnerSidebar } from "~/components";
+import useCar from "~/store/carList";
+import { upload } from "~/assets";
+import useApiSubmit from "~/hooks/useApiSubmit";
 
 const Container = styled.div`
   display: flex;
@@ -50,9 +50,16 @@ const CancelButton = styled.button`
 const EditCar = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
   const carList = useCar((state) => state.carList);
   const current = carList.find((car) => car.id.toString() === id);
+  const { isLoading, doSubmit } = useApiSubmit({
+    method: "PUT",
+    url: `/admin/car/${id}`,
+    headers: {
+      accept: "application/json",
+      access_token: JSON.parse(localStorage.getItem("adminCredential")),
+    },
+  });
 
   const {
     register,
@@ -62,9 +69,19 @@ const EditCar = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const result = await editCar(data, id);
+    const formData = new FormData();
 
-    if (result.status === 200) {
+    for (const [key, value] of Object.entries(data)) {
+      if (typeof value === "object") {
+        formData.append(key, value[0]);
+      } else {
+        formData.append(key, value);
+      }
+    }
+
+    await doSubmit(formData);
+
+    if (!isLoading) {
       navigate("/cars");
       toast("Data Berhasil Disimpan", {
         position: "top-center",

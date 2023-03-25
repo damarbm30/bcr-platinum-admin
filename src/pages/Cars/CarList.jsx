@@ -4,13 +4,13 @@ import { CircularProgress } from "@mui/material";
 import styled from "styled-components";
 
 import "react-toastify/dist/ReactToastify.css";
-import { deleteCar } from "../../services/carServices";
-import useCar from "../../store/carList";
+import { deleteCar } from "~/services/carServices";
+import useCar from "~/store/carList";
 import CarItem from "./CarItem";
 import DeleteModal from "./DeleteModal";
-import useSearch from "../../store/searchResult";
-import useApi from "../../hooks/useApi";
-import { getFormattedCapacity } from "../../utils";
+import useSearch from "~/store/searchResult";
+import useApi from "~/hooks/useApi";
+import { getCategory } from "~/utils";
 
 const Wrapper = styled.div`
   display: grid;
@@ -38,7 +38,7 @@ const CarList = ({ active }) => {
 
   const searchResult = useSearch((state) => state.searchResult);
 
-  const peopleCap = getFormattedCapacity(active);
+  const peopleCap = getCategory(active);
 
   const filteredCarList = (cars) => {
     return cars?.filter((car) => {
@@ -52,23 +52,6 @@ const CarList = ({ active }) => {
       }
     });
   };
-
-  // useEffect(() => {
-  //   async function getCarsAsync() {
-  //     setIsLoading(true);
-  //     const result = await getCars();
-  //     setIsLoading(false);
-
-  //     if (result) {
-  //       setCarList({
-  //         carList: result,
-  //         total: result?.length,
-  //       });
-  //     }
-  //   }
-
-  //   getCarsAsync();
-  // }, [isDeleted]);
 
   const { response, isLoading } = useApi({
     method: "GET",

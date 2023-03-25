@@ -1,14 +1,15 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import moment from "moment/moment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { getDailyOrders } from "../../services/orderServices";
-import { InnerSidebar, Breadcrumb } from "../../components";
+import { InnerSidebar, Breadcrumb } from "~/components";
 import Chart from "./Chart";
 import OrderTable from "./OrderTable";
-import useOrder from "../../store/orderList";
-import useMonth from "../../store/month";
+import useOrder from "~/store/orderList";
+import useMonth from "~/store/month";
+import useApiSubmit from "~/hooks/useApiSubmit";
 
 const Container = styled.div`
   display: flex;
@@ -36,18 +37,50 @@ const MONTHS_LIST = [];
 moment.locale("en");
 
 const Dashboard = () => {
-  const { register, handleSubmit } = useForm();
+  const [date, setDate] = useState({ firstDate: null, lastDate: null });
+  const { response, doSubmit } = useApiSubmit({
+    method: "GET",
+    url: `/admin/order/reports?from=${date.firstDate}&until=${date.lastDate}`,
+    headers: {
+      accept: "application/json",
+      access_token: JSON.parse(localStorage.getItem("adminCredential")),
+    },
+  });
 
+  const { register, handleSubmit } = useForm();
   const { orderList, setOrderList } = useOrder((state) => state);
   const { month, setMonth } = useMonth((state) => state);
 
   const onSubmit = async (data) => {
-    const result = await getDailyOrders(data);
-    setOrderList({
-      orderList: result,
-      total: result?.length,
-    });
+    const selectedDate = data?.date?.split(",");
+    const firstDate = selectedDate[0]?.trim();
+    const lastDate = selectedDate[1]?.trim();
+
+    setDate((prevState) => ({
+      ...prevState,
+      firstDate: firstDate,
+      lastDate: lastDate,
+    }));
   };
+
+  useEffect(() => {
+    async function fetchData() {
+      if (date.firstDate && date.lastDate) {
+        await doSubmit();
+      }
+    }
+
+    fetchData();
+  }, [date]);
+
+  useEffect(() => {
+    if (response) {
+      setOrderList({
+        orderList: response,
+        total: response?.length,
+      });
+    }
+  }, [response]);
 
   const activeMonth = moment(month?.split(",")[0]).format("MMMM YYYY");
 
@@ -102,21 +135,22 @@ const Dashboard = () => {
                   {...register("date")}
                   className="w-25 border border-dark border-opacity-25 p-1"
                   style={{ height: "50px" }}
-                  onChange={(e) => setMonth({ month: e.target.value })}
-                  // selected={activeMonth}
+                  onChange={(e) => {
+                    console.log("LINE 134: ", e.target.value);
+                    setMonth({ month: e.target.value });
+                  }}
+                  defaultValue={month}
                 >
                   <option value="" hidden>
                     Pilih Bulan
                   </option>
                   {MONTHS_LIST.map((item, index) => {
                     const { monthValue, firstDate, lastDate } = item;
-
                     return (
                       <option
                         key={index}
                         name={monthValue}
                         value={`${firstDate}, ${lastDate}`}
-                        selected={monthValue === activeMonth ? true : false}
                       >
                         {monthValue}
                       </option>
@@ -135,6 +169,7 @@ const Dashboard = () => {
                 </button>
               </form>
             </div>
+            {console.log("RENDER VIEW")}
             <Chart data={orderList} />
           </div>
           <div>
