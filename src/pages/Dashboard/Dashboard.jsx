@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import moment from "moment/moment";
 import { useEffect, useState } from "react";
 
-import { getDailyOrders } from "../../services/orderServices";
 import { InnerSidebar, Breadcrumb } from "~/components";
 import Chart from "./Chart";
 import OrderTable from "./OrderTable";
