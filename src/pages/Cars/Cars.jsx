@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import { plus } from "../../assets";
-import { InnerSidebar, Breadcrumb } from "../../components";
+import { plus } from "~/assets";
+import { InnerSidebar, Breadcrumb } from "~/components";
 import CarList from "./CarList";
 
 const Container = styled.div`

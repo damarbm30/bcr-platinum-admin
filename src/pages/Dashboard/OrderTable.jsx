@@ -15,10 +15,9 @@ import { visuallyHidden } from "@mui/utils";
 import { TableFooter } from "@mui/material";
 
 import OrderData from "./OrderData";
-import { getOrders } from "../../services/orderServices";
 import moment from "moment/moment";
-import useCarOrder from "../../store/carOrderList";
-import useApi from "../../hooks/useApi";
+import useCarOrder from "~/store/carOrderList";
+import useApi from "~/hooks/useApi";
 
 function descendingComparator(a, b, orderBy) {
   if (orderBy === "User") {

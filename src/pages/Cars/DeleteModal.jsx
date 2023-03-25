@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { carVector } from "../../assets";
+import { carVector } from "~/assets";
 
 const ConfirmButton = styled.button`
   background-color: var(--primaryBlue);

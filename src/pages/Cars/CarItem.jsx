@@ -4,8 +4,8 @@ import moment from "moment/moment";
 import "moment/locale/id";
 import { useEffect, useState } from "react";
 
-import { clock, edit, people, trash } from "../../assets";
-import { getFormattedPrice, getFormattedCapacity } from "../../utils";
+import { clock, edit, people, trash } from "~/assets";
+import { getFormattedPrice, getCategory } from "~/utils";
 
 moment.locale("id");
 
@@ -13,7 +13,7 @@ const CarItem = ({ id, image, name, price, category, updatedAt, onGetId }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   let formattedPrice = getFormattedPrice(price);
-  let peopleCap = getFormattedCapacity(category);
+  let peopleCap = getCategory(category);
 
   return (
     <div className="card w-100">

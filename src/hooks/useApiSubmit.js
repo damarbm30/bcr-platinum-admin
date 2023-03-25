@@ -23,7 +23,9 @@ const useApiSubmit = (axiosParams) => {
     setIsLoading(true);
     setError(null);
 
-    axiosParams = { ...axiosParams, data: data };
+    if (data) {
+      axiosParams = { ...axiosParams, data: data };
+    }
 
     await fetchData(axiosParams);
   };

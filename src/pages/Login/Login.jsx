@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import { loginImg, logo } from "../../assets";
-import { adminLogin } from "../../services/auth";
+import { loginImg, logo } from "~/assets";
+import { adminLogin } from "~/services/auth";
 import LoginError from "./LoginError";
 
 const Login = () => {
