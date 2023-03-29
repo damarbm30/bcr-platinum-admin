@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import { plus } from "../../assets";
-import { InnerSidebar, Breadcrumb } from "../../components";
+import { plus } from "~/assets";
+import { InnerSidebar, Breadcrumb } from "~/components";
 import CarList from "./CarList";
 
 const Container = styled.div`
@@ -12,6 +12,11 @@ const Container = styled.div`
   position: relative;
   left: 280px;
   width: calc(100% - 280px);
+
+  @media (max-width: 768px) {
+    width: calc(100% - 70px);
+    left: 70px;
+  }
 `;
 
 const Wrapper = styled.div`

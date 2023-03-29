@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import { loginImg, logo } from "../../assets";
-import { adminLogin } from "../../services/auth";
+import { loginImg, logo } from "~/assets";
+import { adminLogin } from "~/services/auth";
 import LoginError from "./LoginError";
 
 const Login = () => {
@@ -30,19 +30,23 @@ const Login = () => {
   const onSubmit = async (data) => {
     const result = await adminLogin(data, setIsError);
     if (result) {
-      navigate("/cars");
+      navigate("/dashboard");
     }
   };
 
   return (
     <section className="container-fluid">
-      <div className="row d-flex">
-        <div className="col p-0">
-          <img src={loginImg} alt="login" className="vh-100" />
+      <div className="row d-flex flex-column flex-lg-row">
+        <div className="col vh-100 p-0 mb-lg-0">
+          <img
+            src={loginImg}
+            alt="login"
+            className="h-100 w-100 object-fit-contain"
+          />
         </div>
-        <div className="d-flex flex-column col align-items-center justify-content-center">
+        <div className="d-flex flex-column col align-items-center justify-content-center p-5 p-lg-2 vh-md-100">
           <div>
-            <img src={logo} alt="logo" className="mb-4" />
+            <img src={logo} alt="logo" className="d-none d-lg-block mb-4" />
             <h1 className="mb-4">Welcome, Admin BCR</h1>
             {isError && <LoginError />}
             <form

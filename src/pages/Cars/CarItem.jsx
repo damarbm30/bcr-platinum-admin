@@ -2,37 +2,18 @@ import { Link } from "react-router-dom";
 import { Skeleton } from "@mui/material";
 import moment from "moment/moment";
 import "moment/locale/id";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { clock, edit, people, trash } from "../../assets";
+import { clock, edit, people, trash } from "~/assets";
+import { getFormattedPrice, getCategory } from "~/utils";
+
+moment.locale("id");
 
 const CarItem = ({ id, image, name, price, category, updatedAt, onGetId }) => {
   const [isLoading, setIsLoading] = useState(true);
 
-  const formatter = new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-  });
-
-  const formattedPrice = formatter.format(price);
-  let peopleCap;
-
-  switch (category?.toLowerCase()) {
-    case "small":
-      peopleCap = "2 - 4 people";
-      break;
-    case "medium":
-      peopleCap = "4 - 6 people";
-      break;
-    case "large":
-      peopleCap = "6 - 8 people";
-      break;
-  }
-
-  moment.locale("id");
-
-  console.log("loading: ", isLoading);
+  let formattedPrice = getFormattedPrice(price);
+  let peopleCap = getCategory(category);
 
   return (
     <div className="card w-100">
@@ -50,6 +31,7 @@ const CarItem = ({ id, image, name, price, category, updatedAt, onGetId }) => {
             src={image}
             alt={name}
             width={!isLoading ? 270 : 0}
+            height={160}
             style={{
               borderRadius: "4px",
               objectFit: "fill",

@@ -9,6 +9,10 @@ const isAuth = () => {
 const PublicRoutes = () => {
   const admin = isAuth();
 
+  if (!localStorage.getItem("adminCredential")) {
+    localStorage.clear();
+  }
+
   return admin ? <Navigate to="/dashboard" replace /> : <Outlet />;
 };
 export default PublicRoutes;

@@ -29,7 +29,7 @@ const Navbar = ({ sidebarWidth }) => {
       style={{ left: sidebarWidth }}
     >
       <div className="container-fluid">
-        <div className="d-flex" style={{ gap: "5.5rem" }}>
+        <div className="d-none d-lg-flex" style={{ gap: "5.5rem" }}>
           <button className="border-0 bg-transparent">
             <img src={logo} alt="logo" />
           </button>

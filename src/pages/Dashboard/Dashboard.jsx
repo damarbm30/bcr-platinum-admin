@@ -1,14 +1,14 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import moment from "moment/moment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { getDailyOrders } from "../../services/orderServices";
-import { InnerSidebar, Breadcrumb } from "../../components";
+import { InnerSidebar, Breadcrumb } from "~/components";
 import Chart from "./Chart";
 import OrderTable from "./OrderTable";
-import useOrder from "../../store/orderList";
-import useMonth from "../../store/month";
+import useOrder from "~/store/orderList";
+import useMonth from "~/store/month";
+import useApiSubmit from "~/hooks/useApiSubmit";
 
 const Container = styled.div`
   display: flex;
@@ -16,6 +16,11 @@ const Container = styled.div`
   position: relative;
   left: 280px;
   width: calc(100% - 280px);
+
+  @media (max-width: 768px) {
+    width: calc(100% - 70px);
+    left: 70px;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -28,27 +33,58 @@ const Wrapper = styled.div`
 
 const MONTHS_LIST = [];
 
-const Dashboard = () => {
-  const { register, handleSubmit } = useForm();
+moment.locale("en");
 
+const Dashboard = () => {
+  const [date, setDate] = useState({ firstDate: null, lastDate: null });
+  const { response, doSubmit } = useApiSubmit({
+    method: "GET",
+    url: `/admin/order/reports?from=${date.firstDate}&until=${date.lastDate}`,
+    headers: {
+      accept: "application/json",
+      access_token: JSON.parse(localStorage.getItem("adminCredential")),
+    },
+  });
+
+  const { register, handleSubmit } = useForm();
   const { orderList, setOrderList } = useOrder((state) => state);
   const { month, setMonth } = useMonth((state) => state);
 
   const onSubmit = async (data) => {
-    const result = await getDailyOrders(data);
-    setOrderList({
-      orderList: result,
-      total: result?.length,
-    });
+    const selectedDate = data?.date?.split(",");
+    const firstDate = selectedDate[0]?.trim();
+    const lastDate = selectedDate[1]?.trim();
+
+    setDate((prevState) => ({
+      ...prevState,
+      firstDate: firstDate,
+      lastDate: lastDate,
+    }));
   };
 
-  const activeMonth = moment(month?.split(",")[0]).format("MMMM");
-  console.log(activeMonth);
+  useEffect(() => {
+    async function fetchData() {
+      if (date.firstDate && date.lastDate) {
+        await doSubmit();
+      }
+    }
 
-  moment.locale("en");
+    fetchData();
+  }, [date]);
+
+  useEffect(() => {
+    if (response) {
+      setOrderList({
+        orderList: response,
+        total: response?.length,
+      });
+    }
+  }, [response]);
+
+  const activeMonth = moment(month?.split(",")[0]).format("MMMM YYYY");
 
   for (let i = 0; i < 12; i++) {
-    const month = moment().subtract(i, "month").format("MMMM - YYYY");
+    const month = moment().subtract(i, "month").format("MMMM YYYY");
     const startOfMonth = moment()
       .subtract(i, "month")
       .startOf("month")
@@ -92,30 +128,25 @@ const Dashboard = () => {
               <p className="mb-2">Month</p>
               <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="d-flex col-2 align-items-center"
+                className="d-flex align-items-center"
               >
                 <select
                   {...register("date")}
-                  className="w-100 border border-dark border-opacity-25 p-1"
+                  className="w-25 border border-dark border-opacity-25 p-1"
                   style={{ height: "50px" }}
                   onChange={(e) => setMonth({ month: e.target.value })}
+                  defaultValue={month}
                 >
                   <option value="" hidden>
                     Pilih Bulan
                   </option>
                   {MONTHS_LIST.map((item, index) => {
                     const { monthValue, firstDate, lastDate } = item;
-
                     return (
                       <option
                         key={index}
                         name={monthValue}
                         value={`${firstDate}, ${lastDate}`}
-                        selected={
-                          monthValue.split(" ")[0] === activeMonth
-                            ? true
-                            : false
-                        }
                       >
                         {monthValue}
                       </option>

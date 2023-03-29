@@ -4,7 +4,11 @@ const Container = styled.div`
   position: fixed;
   left: 70px;
   height: 100vh;
-  width: 220px;
+  width: 210px;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const Wrapper = styled.div`

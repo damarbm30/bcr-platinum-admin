@@ -1,7 +1,7 @@
 import { Outlet, Navigate } from "react-router-dom";
 import { useRef, useLayoutEffect, useState } from "react";
 
-import { Navbar, Sidebar } from "../components";
+import { Navbar, Sidebar } from "~/components";
 
 const isAuth = () => {
   const admin = localStorage.getItem("adminCredential");

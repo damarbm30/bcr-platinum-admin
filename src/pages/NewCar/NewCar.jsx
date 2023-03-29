@@ -3,9 +3,22 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import { Breadcrumb, InnerSidebar } from "../../components";
-import { createCar } from "../../services/carServices";
-import { upload } from "../../assets";
+import { Breadcrumb, InnerSidebar } from "~/components";
+import { upload } from "~/assets";
+import useApiSubmit from "~/hooks/useApiSubmit";
+
+const Container = styled.div`
+  display: flex;
+  min-height: 100%;
+  position: relative;
+  left: 280px;
+  width: calc(100% - 280px);
+
+  @media (max-width: 768px) {
+    width: calc(100% - 70px);
+    left: 70px;
+  }
+`;
 
 const Wrapper = styled.div`
   position: absolute;
@@ -13,6 +26,11 @@ const Wrapper = styled.div`
   min-height: calc(100vh - 54px);
   top: 54px;
   background-color: var(--background);
+
+  @media (max-width: 768px) {
+    top: 20px;
+    min-height: calc(100vh - 20px);
+  }
 `;
 
 const SaveButton = styled.button`
@@ -28,19 +46,36 @@ const CancelButton = styled.button`
 `;
 
 const NewCar = () => {
+  const { isLoading, doSubmit } = useApiSubmit({
+    method: "POST",
+    url: "/admin/car",
+    headers: {
+      accept: "application/json",
+      access_token: JSON.parse(localStorage.getItem("adminCredential")),
+    },
+  });
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
-
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    const result = await createCar({ ...data, status: false });
+    const formData = new FormData();
 
-    if (result.status === 201) {
+    for (const [key, value] of Object.entries(data)) {
+      if (typeof value === "object") {
+        formData.append(key, value[0]);
+      } else {
+        formData.append(key, value);
+      }
+    }
+
+    await doSubmit(formData);
+
+    if (!isLoading) {
       navigate("/cars");
       toast("Data Berhasil Disimpan", {
         position: "top-center",
@@ -57,14 +92,7 @@ const NewCar = () => {
   };
 
   return (
-    <section
-      className="d-flex"
-      style={{
-        position: "relative",
-        left: "280px",
-        width: "calc(100% - 280px)",
-      }}
-    >
+    <Container>
       <InnerSidebar />
       <Wrapper>
         <div className="d-flex flex-column p-4 gap-4">
@@ -73,7 +101,7 @@ const NewCar = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="d-flex flex-column gap-3 bg-white p-4">
               <div className="row align-items-center">
-                <label htmlFor="name" className="col-2">
+                <label htmlFor="name" className="w-25">
                   Nama/Tipe Mobil
                 </label>
                 <input
@@ -81,14 +109,14 @@ const NewCar = () => {
                   id="name"
                   {...register("name", { required: true })}
                   placeholder="Input Nama/Tipe Mobil"
-                  className="col-4 border border-dark border-opacity-25 p-1 rounded"
+                  className="w-50 border border-dark border-opacity-25 p-1 rounded"
                 />
                 {errors.name && (
                   <span className="text-danger">This field is required</span>
                 )}
               </div>
               <div className="row align-items-center">
-                <label htmlFor="price" className="col-2">
+                <label htmlFor="price" className="w-25">
                   Harga
                 </label>
                 <input
@@ -96,19 +124,19 @@ const NewCar = () => {
                   id="price"
                   {...register("price", { required: true })}
                   placeholder="Input Harga Sewa Mobil"
-                  className="col-4 border border-dark border-opacity-25 p-1 rounded"
+                  className="w-50 border border-dark border-opacity-25 p-1 rounded"
                 />
                 {errors.price && (
                   <span className="text-danger">This field is required</span>
                 )}
               </div>
               <div className="row align-items-center">
-                <label htmlFor="image" className="col-2">
+                <label htmlFor="image" className="w-25">
                   Foto
                 </label>
                 <label
                   htmlFor="image"
-                  className="d-flex justify-content-between col-4 border border-dark border-opacity-25 p-2 rounded"
+                  className="d-flex justify-content-between w-50 border border-dark border-opacity-25 p-2 rounded"
                 >
                   {!watch("image") || watch("image").length === 0 ? (
                     <p className="text-muted">Upload Foto Mobil</p>
@@ -130,13 +158,13 @@ const NewCar = () => {
                 )}
               </div>
               <div className="row align-items-center">
-                <label htmlFor="category" className="col-2">
+                <label htmlFor="category" className="w-25">
                   Kategori
                 </label>
                 <select
                   id="category"
                   {...register("category", { required: true })}
-                  className="col-4 border border-dark border-opacity-25 p-1 rounded"
+                  className="w-50 border border-dark border-opacity-25 p-1 rounded"
                   style={{ color: "gray" }}
                 >
                   <option value="" hidden>
@@ -151,12 +179,12 @@ const NewCar = () => {
                 )}
               </div>
               <div className="row align-items-center">
-                <p className="col-2 ">Created at</p>
-                <span className="col-4">-</span>
+                <p className="w-25 ">Created at</p>
+                <span className="w-50">-</span>
               </div>
               <div className="row align-items-center">
-                <p className="col-2 ">Updated at</p>
-                <span className="col-4">-</span>
+                <p className="w-25 ">Updated at</p>
+                <span className="w-50">-</span>
               </div>
             </div>
             <div
@@ -171,6 +199,7 @@ const NewCar = () => {
               <SaveButton
                 className="btn btn-primary border-0 px-3 fw-bold"
                 type="submit"
+                disabled={isLoading}
               >
                 Save
               </SaveButton>
@@ -178,7 +207,7 @@ const NewCar = () => {
           </form>
         </div>
       </Wrapper>
-    </section>
+    </Container>
   );
 };
 export default NewCar;
