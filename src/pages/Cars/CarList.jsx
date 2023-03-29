@@ -2,15 +2,16 @@ import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { CircularProgress } from "@mui/material";
 import styled from "styled-components";
-
 import "react-toastify/dist/ReactToastify.css";
-import { deleteCar } from "~/services/carServices";
+
 import useCar from "~/store/carList";
 import CarItem from "./CarItem";
 import DeleteModal from "./DeleteModal";
 import useSearch from "~/store/searchResult";
 import useApi from "~/hooks/useApi";
 import { getCategory } from "~/utils";
+import useApiSubmit from "~/hooks/useApiSubmit";
+import moment from "moment/moment";
 
 const Wrapper = styled.div`
   display: grid;
@@ -35,24 +36,7 @@ const CarList = ({ active }) => {
   const [carId, setCarId] = useState(null);
 
   const { carList, setCarList, deleteCarList } = useCar((state) => state);
-
   const searchResult = useSearch((state) => state.searchResult);
-
-  const peopleCap = getCategory(active);
-
-  const filteredCarList = (cars) => {
-    return cars?.filter((car) => {
-      if (active !== "All") {
-        return (
-          car?.name?.toLowerCase().includes(searchResult?.toLowerCase()) &&
-          car.category.toLowerCase() === peopleCap
-        );
-      } else {
-        return car?.name?.toLowerCase().includes(searchResult?.toLowerCase());
-      }
-    });
-  };
-
   const { response, isLoading } = useApi({
     method: "GET",
     url: "/admin/v2/car?pageSize=50",
@@ -60,6 +44,31 @@ const CarList = ({ active }) => {
       accept: "application/json",
       access_token: JSON.parse(localStorage.getItem("adminCredential")),
     },
+  });
+  const { response: deleteResponse, doSubmit: onDelete } = useApiSubmit({
+    method: "DELETE",
+    url: `/admin/car/${carId}`,
+    headers: {
+      accept: "application/json",
+      access_token: JSON.parse(localStorage.getItem("adminCredential")),
+    },
+  });
+
+  const peopleCap = getCategory(active);
+
+  const filteredCarList = carList?.filter((car) => {
+    if (active !== "All") {
+      return (
+        car?.name?.toLowerCase().includes(searchResult?.toLowerCase()) &&
+        car.category.toLowerCase() === peopleCap
+      );
+    } else {
+      return car?.name?.toLowerCase().includes(searchResult?.toLowerCase());
+    }
+  });
+
+  const sortedCarList = filteredCarList.sort((a, b) => {
+    return new moment(b.updatedAt).diff(a.updatedAt);
   });
 
   useEffect(() => {
@@ -71,9 +80,16 @@ const CarList = ({ active }) => {
     }
   }, [isLoading]);
 
+  const handleGetId = (id) => {
+    setCarId(id);
+  };
+
   const handleDelete = async (carId) => {
-    const result = await deleteCar(carId);
-    if (result.status == 200) {
+    await onDelete(carId);
+  };
+
+  useEffect(() => {
+    if (deleteResponse?.name === "Delete Success") {
       deleteCarList({ id: carId });
       toast("Data Berhasil Dihapus", {
         position: "top-center",
@@ -87,35 +103,28 @@ const CarList = ({ active }) => {
         className: "text-center",
       });
     }
-  };
-
-  const handleGetId = (id) => {
-    setCarId(id);
-  };
+  }, [deleteResponse]);
 
   return (
     <div className="container-fluid p-0">
       {!isLoading ? (
         <Wrapper>
-          {carList?.length > 0 && filteredCarList(carList).length > 0 ? (
-            filteredCarList(carList)
-              ?.slice(0)
-              .reverse()
-              .map((car) => {
-                const { id, image, name, price, category, updatedAt } = car;
-                return (
-                  <CarItem
-                    key={id}
-                    id={id}
-                    image={image}
-                    name={name}
-                    price={price}
-                    category={category}
-                    updatedAt={updatedAt}
-                    onGetId={handleGetId}
-                  />
-                );
-              })
+          {carList?.length > 0 && sortedCarList?.length > 0 ? (
+            sortedCarList?.map((car) => {
+              const { id, image, name, price, category, updatedAt } = car;
+              return (
+                <CarItem
+                  key={id}
+                  id={id}
+                  image={image}
+                  name={name}
+                  price={price}
+                  category={category}
+                  updatedAt={updatedAt}
+                  onGetId={handleGetId}
+                />
+              );
+            })
           ) : (
             <p>Tidak ada mobil yang dapat ditampilkan</p>
           )}

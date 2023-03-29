@@ -134,10 +134,7 @@ const Dashboard = () => {
                   {...register("date")}
                   className="w-25 border border-dark border-opacity-25 p-1"
                   style={{ height: "50px" }}
-                  onChange={(e) => {
-                    console.log("LINE 134: ", e.target.value);
-                    setMonth({ month: e.target.value });
-                  }}
+                  onChange={(e) => setMonth({ month: e.target.value })}
                   defaultValue={month}
                 >
                   <option value="" hidden>
@@ -168,7 +165,6 @@ const Dashboard = () => {
                 </button>
               </form>
             </div>
-            {console.log("RENDER VIEW")}
             <Chart data={orderList} />
           </div>
           <div>
