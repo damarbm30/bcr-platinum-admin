@@ -42,7 +42,7 @@ const Login = () => {
             src={loginImg}
             alt="login"
             className="h-100 w-100"
-            style={{ objectFit: "contain" }}
+            style={{ objectFit: "fill" }}
           />
         </div>
         <div className="d-flex flex-column col align-items-center justify-content-center p-5 p-lg-2 vh-100">
