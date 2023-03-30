@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Skeleton } from "@mui/material";
 import moment from "moment/moment";
 import "moment/locale/id";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { clock, edit, people, trash } from "~/assets";
 import { getFormattedPrice, getCategory } from "~/utils";
@@ -13,7 +13,7 @@ const CarItem = ({ id, image, name, price, category, updatedAt, onGetId }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   let formattedPrice = getFormattedPrice(price);
-  let peopleCap = getCategory(category);
+  let peopleCap = getCategory(category, true);
 
   return (
     <div className="card w-100">

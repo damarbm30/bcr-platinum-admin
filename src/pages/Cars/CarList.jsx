@@ -60,7 +60,7 @@ const CarList = ({ active }) => {
     if (active !== "All") {
       return (
         car?.name?.toLowerCase().includes(searchResult?.toLowerCase()) &&
-        car.category.toLowerCase() === peopleCap
+        car?.category?.toLowerCase() === peopleCap
       );
     } else {
       return car?.name?.toLowerCase().includes(searchResult?.toLowerCase());
