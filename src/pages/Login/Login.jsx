@@ -36,15 +36,15 @@ const Login = () => {
 
   return (
     <section className="container-fluid">
-      <div className="row d-flex flex-column flex-lg-row">
-        <div className="col vh-100 p-0 mb-lg-0">
+      <div className="row d-flex flex-row">
+        <div className="col vh-100 p-0 mb-lg-0 d-none d-lg-block">
           <img
             src={loginImg}
             alt="login"
             className="h-100 w-100 object-fit-contain"
           />
         </div>
-        <div className="d-flex flex-column col align-items-center justify-content-center p-5 p-lg-2 vh-md-100">
+        <div className="d-flex flex-column col align-items-center justify-content-center p-5 p-lg-2 vh-100">
           <div>
             <img src={logo} alt="logo" className="d-none d-lg-block mb-4" />
             <h1 className="mb-4">Welcome, Admin BCR</h1>

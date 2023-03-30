@@ -3,7 +3,7 @@ import clock from "./clock.svg";
 import edit from "./edit.svg";
 import home from "./home.svg";
 import key from "./key.svg";
-import loginImg from "./login-img.png";
+import loginImg from "./login-img.webp";
 import logo from "./logo.svg";
 import menu from "./menu.svg";
 import plus from "./plus.svg";
