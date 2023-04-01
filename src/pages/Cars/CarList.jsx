@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { CircularProgress } from "@mui/material";
 import styled from "styled-components";
@@ -67,9 +67,13 @@ const CarList = ({ active }) => {
     }
   });
 
-  const sortedCarList = filteredCarList.sort((a, b) => {
-    return new moment(b.updatedAt).diff(a.updatedAt);
-  });
+  const sortedCarList = useMemo(
+    () =>
+      filteredCarList.sort((a, b) => {
+        return new moment(b.updatedAt).diff(a.updatedAt);
+      }),
+    [filteredCarList]
+  );
 
   useEffect(() => {
     if (!isLoading) {
@@ -80,13 +84,16 @@ const CarList = ({ active }) => {
     }
   }, [isLoading]);
 
-  const handleGetId = (id) => {
-    setCarId(id);
-  };
+  const handleGetId = useCallback(
+    (id) => {
+      setCarId(id);
+    },
+    [setCarId, carId]
+  );
 
-  const handleDelete = async (carId) => {
+  const handleDelete = useCallback(async () => {
     await onDelete(carId);
-  };
+  }, [carId]);
 
   useEffect(() => {
     if (deleteResponse?.name === "Delete Success") {
@@ -111,19 +118,8 @@ const CarList = ({ active }) => {
         <Wrapper>
           {carList?.length > 0 && sortedCarList?.length > 0 ? (
             sortedCarList?.map((car) => {
-              const { id, image, name, price, category, updatedAt } = car;
-              return (
-                <CarItem
-                  key={id}
-                  id={id}
-                  image={image}
-                  name={name}
-                  price={price}
-                  category={category}
-                  updatedAt={updatedAt}
-                  onGetId={handleGetId}
-                />
-              );
+              const { id } = car;
+              return <CarItem key={id} {...car} onGetId={handleGetId} />;
             })
           ) : (
             <p>Tidak ada mobil yang dapat ditampilkan</p>

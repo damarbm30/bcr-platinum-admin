@@ -162,23 +162,6 @@ const OrderTable = ({ activeMonth, orderList }) => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - orders?.length) : 0;
 
-  // useEffect(() => {
-  //   async function getOrdersAsync() {
-  //     const result = await getOrders();
-
-  //     console.log(result);
-
-  //     if (result) {
-  //       setOrders({
-  //         orders: result,
-  //         total: result?.length,
-  //       });
-  //     }
-  //   }
-
-  //   getOrdersAsync();
-  // }, []);
-
   const { response, isLoading } = useApi({
     method: "GET",
     url: "/admin/v2/order?sort=created_at%3Aasc&page=1&pageSize=1000",
@@ -220,28 +203,7 @@ const OrderTable = ({ activeMonth, orderList }) => {
           {stableSort(filteredOrderList, getComparator(order, orderBy))
             ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             ?.map((item) => {
-              const {
-                id,
-                User: { email },
-                Car,
-                start_rent_at,
-                finish_rent_at,
-                total_price,
-                category,
-              } = item || {};
-
-              return (
-                <OrderData
-                  key={id}
-                  id={id}
-                  email={email}
-                  car={Car}
-                  startRent={start_rent_at}
-                  finishRent={finish_rent_at}
-                  price={total_price}
-                  category={category}
-                />
-              );
+              return <OrderData {...item} />;
             })}
           {emptyRows > 0 && (
             <TableRow
