@@ -6,8 +6,8 @@ const OrderData = ({
   id,
   email,
   car,
-  startRent,
-  finishRent,
+  start_rent_at,
+  finish_rent_at,
   price,
   category,
 }) => {
@@ -21,10 +21,10 @@ const OrderData = ({
       <TableCell align="left">{email}</TableCell>
       <TableCell align="left">{car}</TableCell>
       <TableCell align="left">
-        {moment(startRent).format("D MMMM YYYY, HH.mm")}
+        {moment(start_rent_at).format("D MMMM YYYY, HH.mm")}
       </TableCell>
       <TableCell align="left">
-        {moment(finishRent).format("D MMMM YYYY, HH.mm")}
+        {moment(finish_rent_at).format("D MMMM YYYY, HH.mm")}
       </TableCell>
       <TableCell align="left">{price}</TableCell>
       <TableCell align="left">{category}</TableCell>

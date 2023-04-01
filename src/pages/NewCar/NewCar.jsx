@@ -93,10 +93,10 @@ const NewCar = () => {
 
   return (
     <Container>
-      <InnerSidebar />
+      <InnerSidebar cars />
       <Wrapper>
         <div className="d-flex flex-column p-4 gap-4">
-          <Breadcrumb newCar />
+          <Breadcrumb cars newCar />
           <h3 className="fw-bold">Add New Car</h3>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="d-flex flex-column gap-3 bg-white p-4">
