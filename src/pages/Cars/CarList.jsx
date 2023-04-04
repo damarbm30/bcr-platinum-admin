@@ -56,16 +56,20 @@ const CarList = ({ active }) => {
 
   const peopleCap = getCategory(active);
 
-  const filteredCarList = carList?.filter((car) => {
-    if (active !== "All") {
-      return (
-        car?.name?.toLowerCase().includes(searchResult?.toLowerCase()) &&
-        car?.category?.toLowerCase() === peopleCap
-      );
-    } else {
-      return car?.name?.toLowerCase().includes(searchResult?.toLowerCase());
-    }
-  });
+  const filteredCarList = useMemo(
+    () =>
+      carList?.filter((car) => {
+        if (active !== "All") {
+          return (
+            car?.name?.toLowerCase().includes(searchResult?.toLowerCase()) &&
+            car?.category?.toLowerCase() === peopleCap
+          );
+        } else {
+          return car?.name?.toLowerCase().includes(searchResult?.toLowerCase());
+        }
+      }),
+    [active, searchResult]
+  );
 
   const sortedCarList = useMemo(
     () =>
