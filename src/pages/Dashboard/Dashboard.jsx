@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import moment from "moment/moment";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 import { InnerSidebar, Breadcrumb } from "~/components";
 import Chart from "./Chart";
@@ -50,7 +50,7 @@ const Dashboard = () => {
   const { orderList, setOrderList } = useOrder((state) => state);
   const { month, setMonth } = useMonth((state) => state);
 
-  const onSubmit = async (data) => {
+  const onSubmit = useCallback(async (data) => {
     const selectedDate = data?.date?.split(",");
     const firstDate = selectedDate[0]?.trim();
     const lastDate = selectedDate[1]?.trim();
@@ -60,7 +60,7 @@ const Dashboard = () => {
       firstDate: firstDate,
       lastDate: lastDate,
     }));
-  };
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
