@@ -203,7 +203,7 @@ const OrderTable = ({ activeMonth, orderList }) => {
           {stableSort(filteredOrderList, getComparator(order, orderBy))
             ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             ?.map((item) => {
-              return <OrderData {...item} />;
+              return <OrderData key={item.id} {...item} />;
             })}
           {emptyRows > 0 && (
             <TableRow

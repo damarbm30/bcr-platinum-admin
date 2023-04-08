@@ -75,9 +75,12 @@ const Cars = () => {
       <Wrapper>
         <div className="d-flex flex-column p-4 gap-4">
           <Breadcrumb cars />
-          <div className="d-flex justify-content-between">
-            <h4 className="fw-bold">List Car</h4>
-            <Link to="/new-car" className="text-decoration-none text-white">
+          <div className="d-flex align-items-center position-relative pb-2">
+            <h4 className="fw-bold position-absolute start-0">List Car</h4>
+            <Link
+              to="/new-car"
+              className="text-decoration-none text-white position-absolute end-0"
+            >
               <Button className="btn btn-primary outline-none border-0 d-flex px-3 py-2 align-items-center gap-2">
                 <img src={plus} alt="plus" />
                 Add New Car
